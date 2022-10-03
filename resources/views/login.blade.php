@@ -1,5 +1,5 @@
 <?php
-include_once("mvc/views/layouts/header.php");
+include_once("mvc/views/layouts/header.blade.php");
 ?>
 <body>
 <div class="wrapper">
@@ -28,5 +28,5 @@ include_once("mvc/views/layouts/header.php");
     </div>
 </div>
 <?php
-include_once("mvc/views/layouts/footer.php");
+include_once("mvc/views/layouts/footer.blade.php");
 ?>

@@ -2,61 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Team;
+use App\Repositories\Repository;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Repositories\Team\TeamRepositoryInterface;
 
 class TeamController extends Controller
 {
-    /**
-     * @var PostRepositoryInterface|\App\Repositories\Repository
-     */
-    protected $teamRepo;
+    protected $teamRepository;
 
-    public function __construct(TeamRepositoryInterface $teamRepo)
+    public function __construct(TeamRepositoryInterface $teamRepository)
     {
-        $this->teamRepo = $teamRepo;
+        $this->teamRepository = $teamRepository;
     }
 
     public function index()
     {
-        $products = $this->teamRepo->getAll();
+        $teams = $this->teamRepository->getAll();
 
-        return view('home.products', ['products' => $products]);
+        return view('Team.index', ['teams' => $teams]);
     }
 
-    public function show($id)
+    public function create()
     {
-        $product = $this->teamRepo->find($id);
+        return view('Team.create');
+    }
 
-        return view('home.product', ['product' => $product]);
+    public function create_confirm(Request $request)
+    {
+        $name = $request->get('name');
+        return view('Team.create_confirm', ['name'=>$name]);
     }
 
     public function store(Request $request)
     {
-        $data = $request->all();
+        dd("oke");
+        $object = new Team();
+        $object->fill($request->except('token'));
+        $object->save();
 
-        //... Validation here
-
-        $product = $this->teamRepo->create($data);
-
-        return view('home.products');
-    }
-
-    public function update(Request $request, $id)
-    {
-        $data = $request->all();
-
-        //... Validation here
-
-        $product = $this->teamRepo->update($id, $data);
-
-        return view('home.products');
-    }
-
-    public function destroy($id)
-    {
-        $this->teamRepo->delete($id);
-
-        return view('home.products');
+        return redirect()->route('Team.search');
     }
 }
