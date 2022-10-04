@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\AncientScope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,5 +24,10 @@ class Employee extends Model
         return Attribute::make(
             get: fn ($value, $attributes) => $attributes['first_name'] .' '. $attributes['last_name'],
         );
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new AncientScope);
     }
 }

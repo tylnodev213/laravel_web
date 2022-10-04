@@ -4,6 +4,7 @@
         <p>Team - Create Confirm</p>
     </div>
     <form class="form_container" action="{{route('Team.store')}}" method="POST" enctype="multipart/form-data">
+        @csrf
         <div class="form_box">
             <div class="row form_input">
                 <div class="col-md-2">Name*</div>

@@ -37,10 +37,44 @@ class TeamController extends Controller
 
     public function store(Request $request)
     {
-        dd("oke");
-        $object = new Team();
-        $object->fill($request->except('token'));
-        $object->save();
+        $data = $request->all();
+
+        //... Validation here
+
+        $teams = $this->teamRepository->create($data);
+
+        return redirect()->route('Team.search');
+    }
+
+    public function edit(Team $team)
+    {
+        return view('Team.edit', ['team' => $team]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = $request->except([
+            '_token',
+            '_method',
+            'save'
+        ]);
+
+        //... Validation here
+
+        $teams = $this->teamRepository->update($id, $data);
+
+        return redirect()->route('Team.search');
+    }
+
+    public function edit_confirm(Request $request, Team $team)
+    {
+        $name = $request->get('name');
+        return view('Team.edit_confirm', ['name'=>$name, 'team'=>$team]);
+    }
+
+    public function destroy($id)
+    {
+        $this->teamRepository->delete($id);
 
         return redirect()->route('Team.search');
     }

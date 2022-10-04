@@ -12,9 +12,15 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         return Team::class;
     }
 
-    public function getProduct()
+    public function deleteTeam($id)
     {
-        return $this->model->select('product_name')->take(5)->get();
+        $data = $this->find($id);
+        dd($data);
+        if($data->del_flag == '0') {
+            $data->update(['del_flag'=>'1']);
+        }else {
+            $data->delete($id);
+        }
     }
 }
 
