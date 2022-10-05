@@ -1,4 +1,10 @@
 @extends('layouts.master');
+@section('title')
+    Login
+@endsection
+@section('stylesheet')
+    {{ asset('public/css/login.css') }}
+@endsection
 @section('content')
 <div class="wrapper">
     <div id="formContent">

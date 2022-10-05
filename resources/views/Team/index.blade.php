@@ -1,5 +1,12 @@
 @extends('layouts.master')
+@section('title')
+    Team - Search
+@endsection
+@section('stylesheet')
+    {{ asset('public/css/style.css') }}
+@endsection
 @section('content')
+    @include("layouts.navbar")
     <div class="notice">
     </div>
     <div class="search_box">

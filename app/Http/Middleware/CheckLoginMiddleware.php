@@ -16,7 +16,7 @@ class CheckLoginMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!session()->has('level')) {
+        if(!session()->has('id_admin')) {
             return redirect()->route('login');
         }
         return $next($request);

@@ -10,10 +10,19 @@ class Team extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    public static function boot()
+    {
+        parent::boot();
+    }
     protected $table = 'm_teams';
     protected $primaryKey = 'id';
     protected $fillable = [
         'name',
+        'ins_id',
+        'ins_datetime',
+        'upd_id',
+        'upd_datetime',
+        'del_flag',
     ];
 
     public function employees() {

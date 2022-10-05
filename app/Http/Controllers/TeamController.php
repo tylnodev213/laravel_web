@@ -37,7 +37,15 @@ class TeamController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->all();
+        $data = $request->except([
+            '_token',
+            'save'
+        ]);;
+
+        $data = array_merge($data, [
+            'ins_id'=> session()->get('id_admin'),
+            'ins_datetime' => date('Y-m-d H:i:s'),
+        ]);
 
         //... Validation here
 
@@ -74,7 +82,7 @@ class TeamController extends Controller
 
     public function destroy($id)
     {
-        $this->teamRepository->delete($id);
+        $this->teamRepository->deleteById($id);
 
         return redirect()->route('Team.search');
     }

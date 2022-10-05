@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
-use http\Env\Request;
 
-class LoginController
+use App\Repositories\Repository;
+use App\Repositories\Employee\EmployeeRepositoryInterface;
+use Illuminate\Http\Request;
+
+class LoginController extends Controller
 {
     public function login()
     {
@@ -13,19 +15,19 @@ class LoginController
     }
     public function process_login(Request $request)
     {
-        try {
-            $user = Employee::query()
-                -> where('email', $request->get('email'))
-                -> where('password', $request->get('password'))
-                ->findOrFail();
-
-            session()->put('id', $user->id);
-            session()->put('name ', $user->name);
-
-            return  redirect()->route('team.search');
-        }catch (\Throwable $e) {
-            return redirect()->route('login');
+        $email = $request->get('email');
+        $password = $request->get('password');
+        if($email == 'admin@gmail.com' && $password == '123456') {
+            session()->put('id_admin', 1);
+            return  redirect()->route('Team.search');
         }
+        return redirect()->route('login');
+    }
+
+    public function logout()
+    {
+        session()->forget('id_admin');
+        return view('Auth.login');
     }
 
 }

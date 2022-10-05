@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Employee\EmployeeRepository;
+use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Team\TeamRepository;
 use App\Repositories\Team\TeamRepositoryInterface;
 use App\Service\Team\TeamService;
@@ -23,8 +25,8 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(
-            TeamServiceInterface::class,
-            TeamService::class
+            EmployeeRepositoryInterface::class,
+            EmployeeRepository::class
         );
     }
 

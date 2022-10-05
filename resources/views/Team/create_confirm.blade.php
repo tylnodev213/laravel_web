@@ -1,5 +1,12 @@
 @extends('layouts.master')
+@section('title')
+    Team - Create Confirm
+@endsection
+@section('stylesheet')
+    {{ asset('public/css/style.css') }}
+@endsection
 @section('content')
+    @include("layouts.navbar")
     <div class="flow_url">
         <p>Team - Create Confirm</p>
     </div>
@@ -8,12 +15,14 @@
         <div class="form_box">
             <div class="row form_input">
                 <div class="col-md-2">Name*</div>
-                <input class="col-md-4 search_box__form--input input--confirm" type="text" name="name" value="{{$name}}">
+                <input class="col-md-4 search_box__form--input input--confirm" type="text" name="name"
+                       value="{{$name}}">
             </div>
         </div>
         <div class="row submit_box">
             <a onclick="history.back()" class="btn search_box__btn__items">Back</a>
-            <input type="submit" value="Save" name="submit" onclick="return confirm('Are you sure?')" class="btn search_box__btn__items search_box__btn__items--blue">
+            <input type="submit" value="Save" name="save" onclick="return confirm('Are you sure?')"
+                   class="btn search_box__btn__items search_box__btn__items--blue">
         </div>
     </form>
 @endsection
