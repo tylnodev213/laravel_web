@@ -17,6 +17,6 @@ class AncientScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('del_flag', config('constants.DELETE_OFF'));
+        $builder->where($model->getTable().'.del_flag', config('constants.DELETE_OFF'));
     }
 }

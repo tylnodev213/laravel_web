@@ -14,8 +14,10 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
 
     public function getAll()
     {
-        $this->model->join('m_teams', 'm_teams.id', '=', 'm_employees.team_id')
-            ->select('m_employees.*', 'm_teams.name')
-            ->get();
+        return  $this->model->join('m_teams', 'm_teams.id', '=', 'm_employees.team_id')
+            ->orderBy('id', 'asc')
+            ->get(['m_employees.*', 'm_teams.name as team_name']);
     }
+
+
 }

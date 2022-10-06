@@ -56,7 +56,7 @@
                         <td class="column text-center col-md-1">{{$team->id}}</td>
                         <td class="column col-md-7">{{$team->name}}</td>
                         <td class="column text-center col-md-2">
-                            <a href="{{route('Team.update', $team)}}" class="btn btn-edit">Edit</a>
+                            <a href="{{route('Team.edit', $team)}}" class="btn btn-edit">Edit</a>
                             <form action="{{route('Team.destroy', $team)}}" method="POST" style="display:inline">
                                 @csrf
                                 @method('DELETE')

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('m_employees', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('team_id')->unsigned();
+            $table->integer('team_id')->nullable();
             $table->string('email',128);
             $table->string('first_name',128);
             $table->string('last_name',128);
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->dateTime('ins_datetime');
             $table->dateTime('upd_datetime')->nullable();
             $table->char('del_flag', 1)->default(0);
-            $table->foreign('team_id')->references('id')->on('m_teams');
+
         });
     }
 

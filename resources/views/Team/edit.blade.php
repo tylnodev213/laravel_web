@@ -10,7 +10,7 @@
     <div class="flow_url">
         <p>Team - Create</p>
     </div>
-    <form class="form_container" action="{{route('Team.edit_confirm', $team)}}" method="POST"
+    <form class="form_container" action="{{route('Team.edit_confirm', $team->id)}}" method="POST"
           enctype="multipart/form-data">
         @csrf
         <div class="form_box">

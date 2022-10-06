@@ -9,10 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
     public static function boot()
     {
         parent::boot();
+
+        static::addGlobalScope(new AncientScope);
     }
     protected $table = 'm_teams';
     protected $primaryKey = 'id';
@@ -29,8 +32,4 @@ class Team extends Model
         return $this->hasMany(Employee::class,'team_id','id');
     }
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new AncientScope);
-    }
 }

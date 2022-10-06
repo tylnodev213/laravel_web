@@ -22,7 +22,7 @@
             <div class="row form_input">
                 <div class="col-md-2">Name*</div>
                 <input type="text" name="name" maxlength="128" class="col-md-4 search_box__form--input input--confirm"
-                       value="{{$name}}">
+                       value="{{$team_upd->name}}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
@@ -31,8 +31,9 @@
             </div>
         </div>
         <div class="row submit_box">
-            <input type="submit" value="Reset" name="reset" class="search_box__btn__items">
-            <input type="submit" value="Save" name="save" class="search_box__btn__items search_box__btn__items--blue">
+            <a onclick="history.back()" class="btn search_box__btn__items">Back</a>
+            <input type="submit" value="Save" name="save" onclick="return confirm('Are you sure?')"
+                   class="btn search_box__btn__items search_box__btn__items--blue">
         </div>
     </form>
 @endsection

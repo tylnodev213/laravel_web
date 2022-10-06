@@ -141,6 +141,23 @@ p {
     width: 50%;
 }
 
+.search_box__form--select {
+     padding: 5px 10px;
+     width: 10%;
+    position: relative;
+ }
+.search_box__form--select::before {
+    content: "v";
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 2px 5px;
+    visibility: visible;
+    background-color: var(--silver);
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
 .search_box__btn {
     justify-content: space-between;
 }
@@ -304,3 +321,8 @@ th a {
 .input--confirm{
     border: none;
 }
+.btn_export{
+    justify-content: right;
+    margin: 30px 10%;
+}
+

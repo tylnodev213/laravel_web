@@ -31,15 +31,16 @@ class TeamController extends Controller
 
     public function create_confirm(Request $request)
     {
-        $name = $request->get('name');
-        return view('Team.create_confirm', ['name'=>$name]);
+        $team = new Team($request->all());
+
+        return view('Team.create_confirm', ['team'=>$team]);
     }
 
     public function store(Request $request)
     {
         $data = $request->except([
             '_token',
-            'save'
+            'save',
         ]);;
 
         $data = array_merge($data, [
@@ -64,7 +65,7 @@ class TeamController extends Controller
         $data = $request->except([
             '_token',
             '_method',
-            'save'
+            'save',
         ]);
 
         //... Validation here
@@ -76,8 +77,12 @@ class TeamController extends Controller
 
     public function edit_confirm(Request $request, Team $team)
     {
-        $name = $request->get('name');
-        return view('Team.edit_confirm', ['name'=>$name, 'team'=>$team]);
+        $team_upd = new Team($request->all());
+
+        return view('Team.edit_confirm', [
+            'team_upd'=>$team_upd,
+            'team' => $team
+        ]);
     }
 
     public function destroy($id)

@@ -1,6 +1,6 @@
 <?php
 $prefix = Route::current()->getPrefix();
-$name = Route::current()->getPrefix()
+$name = Route::current()->getName()
 ?>
 <div class="header_navbar">
     <ul class="row header_navbar__list">

@@ -16,7 +16,7 @@
             <div class="row form_input">
                 <div class="col-md-2">Name*</div>
                 <input class="col-md-4 search_box__form--input input--confirm" type="text" name="name"
-                       value="{{$name}}">
+                       value="{{$team->name}}">
             </div>
         </div>
         <div class="row submit_box">

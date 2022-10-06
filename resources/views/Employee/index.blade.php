@@ -13,10 +13,10 @@
         <form action="" method="GET" id="myForm">
             <div class="row">
                 <p class="search_box__form">Team</p>
-                <select name="team_id">
-                    @foreach($teams as $team)
-                        <option value="{{ $team->id }}">
-                            {{ $team->name }}
+                <select name="team_id" class="search_box__form search_box__form--select">
+                    @foreach($teams as $id => $team)
+                        <option value="{{ $id }}">
+                            {{ $team }}
                         </option>
                     @endforeach
                 </select>
@@ -34,6 +34,9 @@
                 <input type="submit" value="Search" class="search_box__btn__items search_box__btn__items--blue">
             </div>
         </form>
+    </div>
+    <div class="row btn_export">
+        <button class="btn btn-primary">Export CSV</button>
     </div>
     <div class="data">
         <div class="paginate">
@@ -88,7 +91,7 @@
                         <td class="column ">{{$employee->fullName}}</td>
                         <td class="column ">{{$employee->email}}</td>
                         <td class="column text-center">
-                            <a href="{{route('Employee.update', $employee)}}" class="btn btn-edit">Edit</a>
+                            <a href="{{route('Employee.edit', $employee)}}" class="btn btn-edit">Edit</a>
                             <form action="{{route('Employee.destroy', $employee)}}" method="POST" style="display:inline">
                                 @csrf
                                 @method('DELETE')
