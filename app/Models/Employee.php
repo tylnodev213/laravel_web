@@ -112,4 +112,12 @@ class Employee extends Model
         );
     }
 
+    protected function getAvatar(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, $attributes) => $attributes['avatar'],
+        );
+    }
+
+
 }

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('email',128);
             $table->string('first_name',128);
             $table->string('last_name',128);
-            $table->string('password',64);
             $table->char('gender', 1)->comment('1/Male 2/Female');
             $table->date('birthday');
             $table->string('address',256);

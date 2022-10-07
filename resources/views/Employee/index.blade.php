@@ -86,7 +86,7 @@
                 @foreach($employees as $employee)
                     <tr>
                         <td class="column text-center">{{$employee->id}}</td>
-                        <td class="column text-center"><img src="{{url('public')}}/img/avatar_default.png" class="avatar_img" alt="avatar admin"></td>
+                        <td class="column text-center"><img src="{{url('storage')."/app/".$employee->getAvatar}}" class="avatar_img" alt="avatar admin"></td>
                         <td class="column ">{{$employee->teamName}}</td>
                         <td class="column ">{{$employee->fullName}}</td>
                         <td class="column ">{{$employee->email}}</td>
