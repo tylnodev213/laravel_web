@@ -33,6 +33,7 @@ class Employee extends Model
         '4' => 'Intern',
     ];
     protected $fillable = [
+        'id',
         'team_id',
         'email',
         'first_name',

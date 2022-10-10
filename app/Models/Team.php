@@ -20,6 +20,7 @@ class Team extends Model
     protected $table = 'm_teams';
     protected $primaryKey = 'id';
     protected $fillable = [
+        'id',
         'name',
         'ins_id',
         'ins_datetime',

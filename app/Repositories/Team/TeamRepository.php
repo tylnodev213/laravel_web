@@ -13,7 +13,24 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         return Team::class;
     }
 
-    public function deleteById($id)
+    public function show($request)
+    {
+        //sort
+        $sortDirection = $request->session()->get('sortDirection', 'asc');
+        $sort = $request->get('sort','id');
+        //search
+        $name = $request->get('name','');
+
+        $data = $this->model->orderBy($sort,$sortDirection)->where('name','LIKE','%'.$name.'%')->paginate(5);
+
+        $sortDirection = $sortDirection == 'desc' ? 'asc': 'desc';
+
+        $request->session()->put('sortDirection', $sortDirection);
+
+        return $data;
+    }
+
+    public function softDelete($id)
     {
         DB::transaction(function () use ($id) {
             $data = $this->model->find($id);

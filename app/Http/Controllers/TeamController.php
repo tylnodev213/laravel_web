@@ -17,9 +17,9 @@ class TeamController extends Controller
         $this->teamRepository = $teamRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $teams = $this->teamRepository->getAll();
+        $teams = $this->teamRepository->show($request);
 
         return view('Team.index', ['teams' => $teams]);
     }
@@ -87,7 +87,7 @@ class TeamController extends Controller
 
     public function destroy($id)
     {
-        $this->teamRepository->deleteById($id);
+        $this->teamRepository->softDelete($id);
 
         return redirect()->route('Team.search');
     }

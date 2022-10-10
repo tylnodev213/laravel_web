@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 class EmployeeController extends Controller
 {
     protected $repository;
-    protected $teams;
 
     public function __construct(EmployeeRepositoryInterface $repository)
     {
@@ -20,10 +19,9 @@ class EmployeeController extends Controller
         $this->teams = Team::query()->pluck('name','id');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-
-        $employees = $this->repository->getAll();
+        $employees = $this->repository->show($request);
 
         return view('Employee.index', [
             'employees' => $employees,
@@ -95,12 +93,11 @@ class EmployeeController extends Controller
         $data = array_merge($data, [
             'avatar' => $avatar,
         ]);
-
         $employee_upd = new Employee($data);
+        $employee_upd->id = $employee->id;
 
         return view('Employee.edit_confirm', [
-            'employee' => $employee,
-            'employee_upd'=>$employee_upd,
+            'employee' => $employee_upd,
             'teams' => $this->teams,
         ]);
     }
@@ -125,23 +122,16 @@ class EmployeeController extends Controller
 
     public function destroy($id)
     {
-        $this->repository->deleteById($id);
+        $this->repository->softDelete($id);
 
         return redirect()->route('Employee.search');
     }
 
     function storeFile(Request $request)
     {
-        if(!$request->has('avatar')) {
-            return $request->get('old_avatar');
-        }
         $path = Storage::putFile(
             'avatars', $request->file('avatar')
         );
-
-        if(!empty($request->get('old_avatar'))) {
-            $this->removeFile($request->get('old_avatar'));
-        }
 
         return Str::of($path)->after(url('storage').'/app/');
     }

@@ -12,11 +12,45 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
         return Employee::class;
     }
 
-    public function getAll()
+    public function show($request)
     {
-        return  $this->model->join('m_teams', 'm_teams.id', '=', 'm_employees.team_id')
-            ->orderBy('id', 'asc')
-            ->get(['m_employees.*', 'm_teams.name as team_name']);
+        //sort
+        $sortDirection = $request->session()->get('sortDirection', 'asc');
+        $sort = $request->get('sort','id');
+
+        //search
+        $team_id = $request->get('team_id');
+        $name = $request->get('name');
+        $email = $request->get('email');
+
+        if($request->has('team_id')){
+            $data = $this->model
+                ->orderBy($sort,$sortDirection)
+                ->where('team_id',$team_id)
+                ->where('first_name','LIKE','%'.$name.'%')
+                ->where('last_name','LIKE','%'.$name.'%')
+                ->where('email','LIKE','%'.$email.'%')
+                ->paginate(5);
+        }else {
+            $data = $this->model->orderBy($sort,$sortDirection)->paginate(5);
+        }
+
+        $sortDirection = $sortDirection == 'desc' ? 'asc': 'desc';
+
+        $request->session()->put('sortDirection', $sortDirection);
+
+        return $data;
+    }
+
+    public function softDelete($id)
+    {
+        $data = $this->model->find($id);
+
+        if($data->del_flag == '0') {
+            $data->update(['del_flag'=>'1']);
+        }else {
+            $data->delete($id);
+        }
     }
 
 

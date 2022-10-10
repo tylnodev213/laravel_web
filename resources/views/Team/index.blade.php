@@ -10,14 +10,10 @@
     <div class="notice">
     </div>
     <div class="search_box">
-        <form action="" method="GET" id="myForm">
-            <div class="row">
-                <p class="search_box__form">Email</p>
-                <input type="text" class="search_box__form search_box__form--input" name="email" value="">
-            </div>
+        <form action="" id="myForm">
             <div class="row">
                 <p class="search_box__form">Name</p>
-                <input type="text" class="search_box__form search_box__form--input" name="name" value="">
+                <input type="text" class="search_box__form search_box__form--input" name="name" value="{{ request()->get('name') ?? '' }}">
             </div>
             <div class="row search_box__btn">
                 <input type="submit" name="submit" value="Reset" class="reset-btn search_box__btn__items">
@@ -27,30 +23,39 @@
     </div>
     <div class="data">
         <div class="paginate">
+            {{ $teams->links() }}
         </div>
         <table width="100%" border="1" cellspacing="0" class="table table-striped">
             <tr class="table-primary">
                 <th class="text-center col-md-1">
                     <a href="">
                         <span>ID</span>
-                        <span class="sort">
-                        <i class="arrow up"></i>
-                        <i class="arrow down"></i>
-                    </span>
+                        @if ($teams->count()>0)
+                            <a href="{{ route('Team.search', ['sort' => 'id', getRequest(request()->except('sort'))]) }}">
+                            <span class="sort">
+                                <i class="arrow up"></i>
+                                <i class="arrow down"></i>
+                            </span>
+                            </a>
+                        @endif
                     </a>
                 </th>
                 <th class="text-center col-md-7">
                     <a href="">
                         <span>Name</span>
-                        <span class="sort">
-                        <i class="arrow up"></i>
-                        <i class="arrow down"></i>
-                    </span>
+                        @if ($teams->count()>0)
+                            <a href="{{ route('Team.search', ['sort' => 'name', getRequest(request()->except('sort'))]) }}">
+                            <span class="sort">
+                                <i class="arrow up"></i>
+                                <i class="arrow down"></i>
+                            </span>
+                            </a>
+                        @endif
                     </a>
                 </th>
                 <th class="text-center col-md-2">Action</th>
             </tr>
-            @if (isset($teams))
+            @if ($teams->count()>0)
                 @foreach($teams as $team)
                     <tr>
                         <td class="column text-center col-md-1">{{$team->id}}</td>

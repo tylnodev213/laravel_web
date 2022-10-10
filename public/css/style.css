@@ -180,8 +180,8 @@ p {
     margin: 50px 10%;
 }
 
-.paginate {
-    text-align: right;
+.pagination {
+    justify-content: right;
 }
 
 .sort {
@@ -319,6 +319,9 @@ th a {
     text-decoration: none !important;
 }
 .input--confirm{
+    border: none;
+}
+.input--confirm:focus-visible {
     border: none;
 }
 .btn_export{
