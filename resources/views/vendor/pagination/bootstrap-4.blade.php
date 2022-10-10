@@ -7,7 +7,7 @@
                 </li>
             @else
                 <li class="page-item">
-                    <a class="page-link" href="{{ \Request::url()."?".getRequest(request()->except('page')) }}" rel="prev" aria-label="@lang('pagination.first')">&laquo;</a>
+                    <a class="page-link" href="{{ \Request::url().'?'.getRequest(request()->except('page')) }}" rel="prev" aria-label="@lang('pagination.first')">&laquo;</a>
                 </li>
             @endif
             {{-- Previous Page Link --}}
@@ -17,7 +17,7 @@
                 </li>
             @else
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->previousPageUrl()."&".getRequest(request()->except('page')) }}" rel="prev" aria-label="@lang('pagination.previous')">Prev</a>
+                    <a class="page-link" href="{{ $paginator->previousPageUrl().getRequest(request()->except('page')) }}" rel="prev" aria-label="@lang('pagination.previous')">Prev</a>
                 </li>
             @endif
 
@@ -34,7 +34,7 @@
                         @if ($page == $paginator->currentPage())
                             <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
                         @else
-                            <li class="page-item"><a class="page-link" href="{{ $url."&".getRequest(request()->except('page')) }}">{{ $page }}</a></li>
+                            <li class="page-item"><a class="page-link" href="{{ $url.getRequest(request()->except('page')) }}">{{ $page }}</a></li>
                         @endif
                     @endforeach
                 @endif
@@ -43,7 +43,7 @@
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->nextPageUrl()."&".getRequest(request()->except('page')) }}" rel="next" aria-label="@lang('pagination.next')">Next</a>
+                    <a class="page-link" href="{{ $paginator->nextPageUrl().getRequest(request()->except('page')) }}" rel="next" aria-label="@lang('pagination.next')">Next</a>
                 </li>
             @else
                 <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
@@ -52,7 +52,7 @@
             @endif
                 @if ($paginator->hasMorePages())
                     <li class="page-item">
-                        <a class="page-link" href="{{ \Request::url().'?page='.$paginator->lastPage()."&".getRequest(request()->except('page')) }}" rel="last" aria-label="@lang('pagination.last')">&raquo;</a>
+                        <a class="page-link" href="{{ \Request::url().'?page='.$paginator->lastPage().getRequest(request()->except('page')) }}" rel="last" aria-label="@lang('pagination.last')">&raquo;</a>
                     </li>
                 @else
                     <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.last')">

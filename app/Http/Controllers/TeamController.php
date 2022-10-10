@@ -38,18 +38,6 @@ class TeamController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->except([
-            '_token',
-            'save',
-        ]);;
-
-        $data = array_merge($data, [
-            'ins_id'=> session()->get('id_admin'),
-            'ins_datetime' => date('Y-m-d H:i:s'),
-        ]);
-
-        //... Validation here
-
         $teams = $this->teamRepository->create($data);
 
         return redirect()->route('Team.search');
@@ -62,15 +50,7 @@ class TeamController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = $request->except([
-            '_token',
-            '_method',
-            'save',
-        ]);
-
-        //... Validation here
-
-        $teams = $this->teamRepository->update($id, $data);
+        $teams = $this->teamRepository->update($id, $request);
 
         return redirect()->route('Team.search');
     }

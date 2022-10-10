@@ -21,13 +21,44 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         //search
         $name = $request->get('name','');
 
-        $data = $this->model->orderBy($sort,$sortDirection)->where('name','LIKE','%'.$name.'%')->paginate(5);
+        $data = $this->model->orderBy($sort,$sortDirection)->where('name','LIKE','%'.$name.'%')->paginate(config('constants.pagination_records'));
 
         $sortDirection = $sortDirection == 'desc' ? 'asc': 'desc';
 
         $request->session()->put('sortDirection', $sortDirection);
 
         return $data;
+    }
+
+    public function create($attributes = [])
+    {
+        $attributes = $attributes->except([
+            '_token',
+            'save',
+        ]);;
+
+        $attributes = array_merge($attributes, [
+            'ins_id'=> session()->get('id_admin'),
+            'ins_datetime' => date('Y-m-d H:i:s'),
+        ]);
+
+        return parent::create($attributes);
+    }
+
+    public function update($id, $attributes = [])
+    {
+        $attributes = $attributes->except([
+            '_token',
+            '_method',
+            'save',
+        ]);
+
+        $attributes = array_merge($attributes, [
+            'upd_id'=> session()->get('id_admin'),
+            'upd_datetime' => date('Y-m-d H:i:s'),
+        ]);
+
+        return parent::update($id, $attributes);
     }
 
     public function softDelete($id)

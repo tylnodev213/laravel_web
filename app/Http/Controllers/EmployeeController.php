@@ -59,19 +59,8 @@ class EmployeeController extends Controller
         if($request->get('submit')== 'Back') {
             return redirect()->route('Employee.create')->withInput($request->input());
         }
-        $data = $request->except([
-            '_token',
-            'submit',
-        ]);;
 
-        $data = array_merge($data, [
-            'ins_id'=> session()->get('id_admin'),
-            'ins_datetime' => date('Y-m-d H:i:s'),
-        ]);
-
-        //... Validation here
-
-        $teams = $this->repository->create($data);
+        $teams = $this->repository->create($request);
 
         return redirect()->route('Employee.search');
     }
@@ -107,15 +96,8 @@ class EmployeeController extends Controller
         if($request->get('submit')== 'Back') {
             return redirect()->route('Employee.edit',$id)->withInput($request->input());
         }
-        $data = $request->except([
-            '_token',
-            '_method',
-            'submit',
-        ]);
 
-        //... Validation here
-
-        $teams = $this->repository->update($id, $data);
+        $teams = $this->repository->update($id, $request);
 
         return redirect()->route('Employee.search');
     }

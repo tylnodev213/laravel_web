@@ -7,6 +7,10 @@ function getRequest($request)
     {
         $condition[] = $field.'='.$value;
     }
-    return implode('&', $condition);
+
+    if(empty($condition)){
+        return '';
+    }
+    return '&'.implode('&', $condition);
 
 }
