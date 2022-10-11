@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EmployeesExport;
 use App\Models\Employee;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
@@ -62,6 +64,8 @@ class EmployeeController extends Controller
 
         $teams = $this->repository->create($request);
 
+        $request->session()->put('message_successful','Create '.config('constants.message_successful'));
+
         return redirect()->route('Employee.search');
     }
 
@@ -99,12 +103,16 @@ class EmployeeController extends Controller
 
         $teams = $this->repository->update($id, $request);
 
+        $request->session()->put('message_successful','Update '.config('constants.message_successful'));
+
         return redirect()->route('Employee.search');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $this->repository->softDelete($id);
+
+        $request->session()->put('message_successful','Delete '.config('constants.message_successful'));
 
         return redirect()->route('Employee.search');
     }
@@ -121,5 +129,9 @@ class EmployeeController extends Controller
     function removeFile($file_name)
     {
         Storage::delete($file_name);
+    }
+
+    function exportFile() {
+        return Excel::download(new EmployeesExport, 'employees.csv');
     }
 }

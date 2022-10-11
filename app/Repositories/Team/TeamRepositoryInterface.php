@@ -5,5 +5,6 @@ use App\Repositories\RepositoryInterface;
 
 interface TeamRepositoryInterface extends RepositoryInterface
 {
-    public function deleteById($id);
+    public function show($request);
+    public function softDelete($id);
 }

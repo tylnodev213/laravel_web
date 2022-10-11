@@ -38,7 +38,7 @@ class TeamController extends Controller
 
     public function store(Request $request)
     {
-        $teams = $this->teamRepository->create($data);
+        $teams = $this->teamRepository->create($request);
 
         return redirect()->route('Team.search');
     }

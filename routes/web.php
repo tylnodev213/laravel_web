@@ -49,4 +49,5 @@ Route::group(['prefix'=>'Employee', 'as'=>'Employee.', 'middleware'=> CheckLogin
 
     Route::put('/edit/{employee}', [EmployeeController::class, 'update'])->name('update');
 
+    Route::get('exportFile', [EmployeeController::class, 'exportFile'])->name('export_file');
 });

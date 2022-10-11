@@ -8,9 +8,6 @@ function getRequest($request)
         $condition[] = $field.'='.$value;
     }
 
-    if(empty($condition)){
-        return '';
-    }
-    return '&'.implode('&', $condition);
+    return implode('&', $condition);
 
 }

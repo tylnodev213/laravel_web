@@ -54,20 +54,13 @@ class Employee extends Model
     ];
 
     public function team() {
-        return $this->belongsTo(Team::class,'team_id','id');
+        return $this->belongsTo(Team::class,'team_id','id')->addSelect('name');
     }
 
     protected function fullName(): Attribute
     {
         return Attribute::make(
             get: fn ($value, $attributes) => $attributes['first_name'] .' '. $attributes['last_name'],
-        );
-    }
-
-    protected function teamName(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value, $attributes) => $attributes['team_name'],
         );
     }
 

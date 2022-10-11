@@ -3,6 +3,7 @@ namespace App\Repositories\Team;
 
 use App\Models\Team;
 use App\Repositories\BaseRepository;
+use App\Repositories\Employee\EmployeeRepository;
 use Illuminate\Support\Facades\DB;
 
 class TeamRepository extends BaseRepository implements TeamRepositoryInterface
@@ -21,56 +22,31 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         //search
         $name = $request->get('name','');
 
-        $data = $this->model->orderBy($sort,$sortDirection)->where('name','LIKE','%'.$name.'%')->paginate(config('constants.pagination_records'));
+        $data = $this->model
+            ->select(['id','name'])
+            ->when (!empty($name) , function ($query) use($name){
+                return $query->where('name','LIKE','%'.$name.'%');
+            })
+            ->orderBy($sort,$sortDirection)
+            ->paginate(config('constants.pagination_records'));
+
 
         $sortDirection = $sortDirection == 'desc' ? 'asc': 'desc';
-
-        $request->session()->put('sortDirection', $sortDirection);
+        session()->put('sortDirection', $sortDirection);
 
         return $data;
     }
 
-    public function create($attributes = [])
+    public function softDelete($team_id)
     {
-        $attributes = $attributes->except([
-            '_token',
-            'save',
-        ]);;
-
-        $attributes = array_merge($attributes, [
-            'ins_id'=> session()->get('id_admin'),
-            'ins_datetime' => date('Y-m-d H:i:s'),
-        ]);
-
-        return parent::create($attributes);
-    }
-
-    public function update($id, $attributes = [])
-    {
-        $attributes = $attributes->except([
-            '_token',
-            '_method',
-            'save',
-        ]);
-
-        $attributes = array_merge($attributes, [
-            'upd_id'=> session()->get('id_admin'),
-            'upd_datetime' => date('Y-m-d H:i:s'),
-        ]);
-
-        return parent::update($id, $attributes);
-    }
-
-    public function softDelete($id)
-    {
-        DB::transaction(function () use ($id) {
-            $data = $this->model->find($id);
-            if($data->del_flag == '0') {
-                $data->update(['del_flag'=>'1']);
-                DB::table('m_employees')->where('team_id',$id)->update(['team_id' => NULL]);
+        DB::transaction(function () use ($team_id) {
+            $data = $this->model->find($team_id);
+            if($data->del_flag == config('constants.DELETE_OFF')) {
+                $data->update(['del_flag'=>config('constants.DELETE_ON')]);
+                DB::table('m_employees')->where('team_id',$team_id)->update(['team_id' => NULL]);
             }else {
-                $data->delete($id);
-                DB::table('m_employees')->where('team_id',$id)->update(['team_id' => NULL]);
+                $data->delete($team_id);
+                DB::table('m_employees')->where('team_id',$team_id)->update(['team_id' => NULL]);
             }
         });
     }

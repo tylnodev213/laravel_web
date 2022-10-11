@@ -34,11 +34,32 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function create($attributes = [])
     {
+        $attributes = $attributes->except([
+            '_token',
+            'submit',
+        ]);
+
+        $attributes = array_merge($attributes, [
+            'ins_id'=> session()->get('id_admin'),
+            'ins_datetime' => date('Y-m-d H:i:s'),
+        ]);
+
         return $this->model->create($attributes);
     }
 
     public function update($id, $attributes = [])
     {
+        $attributes = $attributes->except([
+            '_token',
+            '_method',
+            'submit',
+        ]);
+
+        $attributes = array_merge($attributes, [
+            'upd_id'=> session()->get('id_admin'),
+            'upd_datetime' => date('Y-m-d H:i:s'),
+        ]);
+
         $result = $this->find($id);
         if ($result) {
             $result->update($attributes);
@@ -58,15 +79,5 @@ abstract class BaseRepository implements RepositoryInterface
         }
 
         return false;
-    }
-
-    public function deleteById($id)
-    {
-        $data = $this->model->find($id);
-        if($data->del_flag == '0') {
-            $data->update(['del_flag'=>'1']);
-        }else {
-            $data->delete($id);
-        }
     }
 }

@@ -8,6 +8,7 @@
 @section('content')
     @include("layouts.navbar")
     <div class="notice">
+        {{ getNoticeAction() }}
     </div>
     <div class="search_box">
         <form action="" id="myForm">
@@ -36,7 +37,7 @@
         </form>
     </div>
     <div class="row btn_export">
-        <button class="btn btn-primary">Export CSV</button>
+        <a href="{{ route('Employee.export_file') }}" class="btn btn-primary">Export CSV</a>
     </div>
     <div class="data">
         <div class="paginate">
@@ -104,7 +105,7 @@
                     <tr>
                         <td class="column text-center">{{$employee->id}}</td>
                         <td class="column text-center"><img src="{{url('storage')."/app/".$employee->getAvatar}}" class="avatar_img" alt="avatar admin"></td>
-                        <td class="column ">{{$employee->team->name ?? 'No room yet'}}</td>
+                        <td class="column ">{{$employee->team->name ?? config('constants.ROOM_IS_NULL')}}</td>
                         <td class="column ">{{$employee->fullName}}</td>
                         <td class="column ">{{$employee->email}}</td>
                         <td class="column text-center">

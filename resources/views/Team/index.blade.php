@@ -8,6 +8,7 @@
 @section('content')
     @include("layouts.navbar")
     <div class="notice">
+        {{ getNoticeAction() }}
     </div>
     <div class="search_box">
         <form action="" id="myForm">

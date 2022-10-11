@@ -5,5 +5,6 @@ use App\Repositories\RepositoryInterface;
 
 interface EmployeeRepositoryInterface extends RepositoryInterface
 {
-    public function getAll();
+    public function show($request);
+    public function softDelete($id);
 }
