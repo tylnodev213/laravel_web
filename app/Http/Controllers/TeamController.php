@@ -38,21 +38,19 @@ class TeamController extends Controller
 
     public function store(Request $request)
     {
-        $teams = $this->teamRepository->create($request);
+        try{
+            $teams = $this->teamRepository->create($request);
+        }catch (Exception $e) {
+            Log::info('Create team fail.', ['id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+            return redirect()->route('Team.search')->withError(config('constants.message_create_fail'));
+        }
 
-        return redirect()->route('Team.search');
+        return redirect()->route('Team.search')->with('message_successful', config('constants.message_create_successful'));
     }
 
     public function edit(Team $team)
     {
         return view('Team.edit', ['team' => $team]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $teams = $this->teamRepository->update($id, $request);
-
-        return redirect()->route('Team.search');
     }
 
     public function edit_confirm(Request $request, Team $team)
@@ -65,10 +63,27 @@ class TeamController extends Controller
         ]);
     }
 
+    public function update(Request $request, $id)
+    {
+        try{
+            $teams = $this->teamRepository->update($id, $request);
+        }catch (Exception $e) {
+            Log::info('Update team fail.', ['id'=>$id,'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+            return redirect()->route('Team.search')->withError(config('constants.message_update_fail'));
+        }
+
+        return redirect()->route('Team.search')->with('message_successful', config('constants.message_update_successful'));
+    }
+
     public function destroy($id)
     {
-        $this->teamRepository->softDelete($id);
+        try{
+            $teams = $this->teamRepository->softDelete($id);
+        }catch (Exception $e) {
+            Log::info('Delete team fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+            return redirect()->route('Team.search')->withError(config('constants.message_delete_fail'));
+        }
 
-        return redirect()->route('Team.search');
+        return redirect()->route('Team.search')->with('message_successful',config('constants.message_delete_successful'));
     }
 }

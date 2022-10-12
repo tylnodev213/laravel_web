@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="row submit_box">
-            <input type="submit" value="Reset" name="reset" class="search_box__btn__items">
+            <a href="{{ route('Team.edit', $team) }}" class="btn reset-btn search_box__btn__items">Reset</a>
             <input type="submit" value="Confirm" name="save"
                    class="search_box__btn__items search_box__btn__items--blue">
         </div>

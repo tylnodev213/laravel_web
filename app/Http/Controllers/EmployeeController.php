@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Exports\EmployeesExport;
 use App\Models\Employee;
 use App\Models\Team;
+use App\Repositories\Team\TeamRepository;
 use Illuminate\Http\Request;
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
 class EmployeeController extends Controller
 {
@@ -42,7 +44,7 @@ class EmployeeController extends Controller
     {
         $data = $request->except('avatar');
 
-        $avatar = $this->storeFile($request);
+        $avatar = storeFile($request);
 
         $data = array_merge($data, [
             'avatar' => $avatar,
@@ -62,11 +64,14 @@ class EmployeeController extends Controller
             return redirect()->route('Employee.create')->withInput($request->input());
         }
 
-        $teams = $this->repository->create($request);
+        try{
+            $employees = $this->repository->create($request);
+        }catch (Exception $e) {
+            Log::info('Create employee fail.', ['id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+            return redirect()->route('Employee.search')->withError(config('constants.message_create_fail'));
+        }
 
-        $request->session()->put('message_successful','Create '.config('constants.message_successful'));
-
-        return redirect()->route('Employee.search');
+        return redirect()->route('Employee.search')->with('message_successful', config('constants.message_create_successful'));
     }
 
     public function edit(Employee $employee)
@@ -101,37 +106,29 @@ class EmployeeController extends Controller
             return redirect()->route('Employee.edit',$id)->withInput($request->input());
         }
 
-        $teams = $this->repository->update($id, $request);
+        try{
+            $teams = $this->repository->update($id, $request);
+        }catch (Exception $e) {
+            Log::info('Update employee fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+            return redirect()->route('Employee.search')->withError(config('constants.message_update_fail'));
+        }
 
-        $request->session()->put('message_successful','Update '.config('constants.message_successful'));
-
-        return redirect()->route('Employee.search');
+        return redirect()->route('Employee.search')->with('message_successful',config('constants.message_update_successful'));
     }
 
     public function destroy(Request $request, $id)
     {
-        $this->repository->softDelete($id);
+        try{
+            $data=$this->repository->softDelete($id);
+        }catch (Exception $e) {
+            Log::info('Delete employee fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+            return redirect()->route('Employee.search')->withError(config('constants.message_delete_fail'));
+        }
 
-        $request->session()->put('message_successful','Delete '.config('constants.message_successful'));
-
-        return redirect()->route('Employee.search');
-    }
-
-    function storeFile(Request $request)
-    {
-        $path = Storage::putFile(
-            'avatars', $request->file('avatar')
-        );
-
-        return Str::of($path)->after(url('storage').'/app/');
-    }
-
-    function removeFile($file_name)
-    {
-        Storage::delete($file_name);
+        return redirect()->route('Employee.search')->with('message_successful',config('constants.message_delete_successful'));
     }
 
     function exportFile() {
-        return Excel::download(new EmployeesExport, 'employees.csv');
+        return Excel::download(new EmployeesExport(), 'employees.csv');
     }
 }

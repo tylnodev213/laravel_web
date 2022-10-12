@@ -21,7 +21,7 @@
         </div>
         <div class="row submit_box">
             <a onclick="history.back()" class="btn search_box__btn__items">Back</a>
-            <input type="submit" value="Save" name="save" onclick="return confirm('Are you sure?')"
+            <input type="submit" value="Save" name="submit" onclick="return confirm('Are you sure?')"
                    class="btn search_box__btn__items search_box__btn__items--blue">
         </div>
     </form>

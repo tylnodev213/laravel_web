@@ -8,7 +8,13 @@
 @section('content')
     @include("layouts.navbar")
     <div class="notice">
-        {{ getNoticeAction() }}
+        @if(session()->has('message_successful'))
+            <div class="alert alert-success">
+                {{ session()->get('message_successful') }}
+            </div>
+        @elseif (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
     </div>
     <div class="search_box">
         <form action="" id="myForm">
@@ -17,7 +23,7 @@
                 <input type="text" class="search_box__form search_box__form--input" name="name" value="{{ request()->get('name') ?? '' }}">
             </div>
             <div class="row search_box__btn">
-                <input type="submit" name="submit" value="Reset" class="reset-btn search_box__btn__items">
+                <a href="{{ route('Team.search') }}" class="btn reset-btn search_box__btn__items">Reset</a>
                 <input type="submit" value="Search" class="search_box__btn__items search_box__btn__items--blue">
             </div>
         </form>
@@ -32,7 +38,7 @@
                     <a href="">
                         <span>ID</span>
                         @if ($teams->count()>0)
-                            <a href="{{ route('Team.search', ['sort' => 'id', getRequest(request()->except('sort'))]) }}">
+                            <a href="{{ sortByField('id').getRequest(request()->except(['sort','sortDirection'])) }}">
                             <span class="sort">
                                 <i class="arrow up"></i>
                                 <i class="arrow down"></i>
@@ -45,7 +51,7 @@
                     <a href="">
                         <span>Name</span>
                         @if ($teams->count()>0)
-                            <a href="{{ route('Team.search', ['sort' => 'name', getRequest(request()->except('sort'))]) }}">
+                            <a href="{{ sortByField('name').getRequest(request()->except(['sort','sortDirection'])) }}">
                             <span class="sort">
                                 <i class="arrow up"></i>
                                 <i class="arrow down"></i>

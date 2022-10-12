@@ -3,7 +3,9 @@ namespace App\Repositories\Employee;
 
 use App\Models\Employee;
 use App\Repositories\BaseRepository;
+use Exception;
 use http\Env\Request;
+use Illuminate\Database\QueryException;
 
 class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInterface
 {
@@ -15,7 +17,7 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
     public function show($request)
     {
         //sort
-        $sortDirection = $request->session()->get('sortDirection', 'asc');
+        $sortDirection = $request->get('sortDirection','asc');
         $sort = $request->get('sort','id');
 
         //search
@@ -31,7 +33,7 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
             })
             ->when (!empty($name) , function ($query) use($name){
                 return $query->where('first_name', 'LIKE', '%'.$name.'%')
-                    ->where('last_name', 'LIKE', '%'.$name.'%');
+                    ->orWhere('last_name', 'LIKE', '%'.$name.'%');
             })
             ->when (!empty($email) , function ($query) use($email){
                 return $query->where('email', 'LIKE', '%'.$email.'%');
@@ -39,22 +41,12 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
             ->orderBy($sort, $sortDirection)
             ->paginate(config('constants.pagination_records'));
 
-        $sortDirection = $sortDirection == 'desc' ? 'asc': 'desc';
-
-        $request->session()->put('sortDirection', $sortDirection);
-
         return $data;
     }
 
     public function softDelete($id)
     {
-        $data = $this->model->find($id);
-
-        if($data->del_flag == config('constants.DELETE_OFF')) {
-            $data->update(['del_flag'=>config('constants.DELETE_ON')]);
-        }else {
-            $data->delete($id);
-        }
+        return $this->update($id, ['del_flag'=>config('constants.DELETE_ON')]);
     }
 
 

@@ -5,6 +5,8 @@ use App\Models\Team;
 use App\Repositories\BaseRepository;
 use App\Repositories\Employee\EmployeeRepository;
 use Illuminate\Support\Facades\DB;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 {
@@ -17,7 +19,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     public function show($request)
     {
         //sort
-        $sortDirection = $request->session()->get('sortDirection', 'asc');
+        $sortDirection = $request->get('sortDirection','asc');
         $sort = $request->get('sort','id');
         //search
         $name = $request->get('name','');
@@ -30,25 +32,27 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             ->orderBy($sort,$sortDirection)
             ->paginate(config('constants.pagination_records'));
 
-
-        $sortDirection = $sortDirection == 'desc' ? 'asc': 'desc';
-        session()->put('sortDirection', $sortDirection);
-
         return $data;
     }
 
     public function softDelete($team_id)
     {
-        DB::transaction(function () use ($team_id) {
-            $data = $this->model->find($team_id);
-            if($data->del_flag == config('constants.DELETE_OFF')) {
-                $data->update(['del_flag'=>config('constants.DELETE_ON')]);
-                DB::table('m_employees')->where('team_id',$team_id)->update(['team_id' => NULL]);
-            }else {
-                $data->delete($team_id);
-                DB::table('m_employees')->where('team_id',$team_id)->update(['team_id' => NULL]);
-            }
-        });
+        DB::beginTransaction();
+        try {
+            $this->update($team_id,[
+                'del_flag'=>config('constants.DELETE_ON')
+            ]);
+            DB::table('m_employees')->where('team_id',$team_id)
+                ->update([
+                    'team_id' => NULL,
+                    'upd_id'=>session()->get('id_admin'),
+                    'upd_datetime'=>date('Y-m-d H:i:s'),
+                    ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw new \Exception(config('constants.message_delete_fail'));
+        }
     }
 }
 

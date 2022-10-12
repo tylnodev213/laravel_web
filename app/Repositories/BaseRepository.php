@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\RepositoryInterface;
+use PHPUnit\Exception;
 
 abstract class BaseRepository implements RepositoryInterface
 {
@@ -29,16 +30,17 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function find($id)
     {
-        return $this->model->where('id',$id);
+        return $this->model->findOrFail($id);
     }
 
     public function create($attributes = [])
     {
-        $attributes = $attributes->except([
-            '_token',
-            'submit',
-        ]);
-
+        if(in_array(['_token', 'submit',], $attributes)) {
+            $attributes = $attributes->except([
+                '_token',
+                'submit',
+            ]);
+        }
         $attributes = array_merge($attributes, [
             'ins_id'=> session()->get('id_admin'),
             'ins_datetime' => date('Y-m-d H:i:s'),
@@ -49,11 +51,13 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function update($id, $attributes = [])
     {
-        $attributes = $attributes->except([
-            '_token',
-            '_method',
-            'submit',
-        ]);
+        if(in_array(['_token', 'submit', '_method',], $attributes)) {
+            $attributes = $attributes->except([
+                '_token',
+                'submit',
+                '_method',
+            ]);
+        }
 
         $attributes = array_merge($attributes, [
             'upd_id'=> session()->get('id_admin'),
@@ -61,7 +65,7 @@ abstract class BaseRepository implements RepositoryInterface
         ]);
 
         $result = $this->find($id);
-        if ($result) {
+        if ($result->count()) {
             $result->update($attributes);
             return $result;
         }
@@ -72,7 +76,8 @@ abstract class BaseRepository implements RepositoryInterface
     public function delete($id)
     {
         $result = $this->find($id);
-        if ($result) {
+
+        if ($result->count()) {
             $result->delete();
 
             return true;

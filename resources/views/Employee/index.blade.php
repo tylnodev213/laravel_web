@@ -8,13 +8,20 @@
 @section('content')
     @include("layouts.navbar")
     <div class="notice">
-        {{ getNoticeAction() }}
+        @if(session()->has('message_successful'))
+            <div class="alert alert-success">
+                {{ session()->get('message_successful') }}
+            </div>
+        @elseif (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
     </div>
     <div class="search_box">
         <form action="" id="myForm">
             <div class="row">
                 <p class="search_box__form">Team</p>
                 <select name="team_id" class="search_box__form search_box__form--select">
+                    <option value="">-Choose-</option>
                     @foreach($teams as $id => $team)
                         <option value="{{ $id }}" @selected( request()->get('team_id') == $id) >
                             {{ $team }}
@@ -31,7 +38,7 @@
                 <input type="text" class="search_box__form search_box__form--input" name="email" value="{{ request()->get('email') }}">
             </div>
             <div class="row search_box__btn">
-                <input type="submit" name="submit" value="Reset" class="reset-btn search_box__btn__items">
+                <a href="{{ route('Employee.search') }}" class="btn reset-btn search_box__btn__items">Reset</a>
                 <input type="submit" value="Search" class="search_box__btn__items search_box__btn__items--blue">
             </div>
         </form>
@@ -49,7 +56,7 @@
                     <a href="">
                         <span>ID</span>
                         @if ($employees->count()>0)
-                            <a href="{{ route('Employee.search', ['sort' => 'id', getRequest(request()->except('sort'))]) }}">
+                            <a href="{{ sortByField('id').getRequest(request()->except(['sort','sortDirection'])) }}">
                                 <span class="sort">
                                     <i class="arrow up"></i>
                                     <i class="arrow down"></i>
@@ -63,7 +70,7 @@
                     <a href="">
                         <span>Team</span>
                         @if ($employees->count()>0)
-                            <a href="{{ route('Employee.search', ['sort' => 'team_id', getRequest(request()->except('sort'))]) }}">
+                            <a href="{{ sortByField('team_id').getRequest(request()->except(['sort','sortDirection'])) }}">
                             <span class="sort">
                                 <i class="arrow up"></i>
                                 <i class="arrow down"></i>
@@ -76,7 +83,7 @@
                     <a href="">
                         <span>Name</span>
                         @if ($employees->count()>0)
-                            <a href="{{ route('Employee.search', ['sort' => 'last_name', getRequest(request()->except('sort'))]) }}">
+                            <a href="{{ sortByField('last_name').getRequest(request()->except(['sort','sortDirection'])) }}">
                             <span class="sort">
                                 <i class="arrow up"></i>
                                 <i class="arrow down"></i>
@@ -89,7 +96,7 @@
                     <a href="">
                         <span>Email</span>
                         @if ($employees->count()>0)
-                            <a href="{{ route('Employee.search', ['sort' => 'email', getRequest(request()->except('sort'))]) }}">
+                            <a href="{{ sortByField('email').getRequest(request()->except(['sort','sortDirection'])) }}">
                             <span class="sort">
                                 <i class="arrow up"></i>
                                 <i class="arrow down"></i>
@@ -104,7 +111,7 @@
                 @foreach($employees as $employee)
                     <tr>
                         <td class="column text-center">{{$employee->id}}</td>
-                        <td class="column text-center"><img src="{{url('storage')."/app/".$employee->getAvatar}}" class="avatar_img" alt="avatar admin"></td>
+                        <td class="column text-center"><img src="{{$employee->getAvatar}}" class="avatar_img" alt="avatar admin"></td>
                         <td class="column ">{{$employee->team->name ?? config('constants.ROOM_IS_NULL')}}</td>
                         <td class="column ">{{$employee->fullName}}</td>
                         <td class="column ">{{$employee->email}}</td>

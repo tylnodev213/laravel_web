@@ -1,9 +1,8 @@
 <?php
 
-function getNoticeAction()
+function getNoticeActionSuccessful()
 {
-    echo session()->get('message_successful');
-    session()->pull('message_successful');
+
 }
 
 
