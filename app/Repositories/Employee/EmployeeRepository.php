@@ -49,5 +49,19 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
         return $this->update($id, ['del_flag'=>config('constants.DELETE_ON')]);
     }
 
+    public function create($attributes = [])
+    {
+        $attributes['avatar'] = storeFile($attributes['avatar']);
+
+        return parent::create($attributes);
+    }
+
+    public function update($id, $attributes = [])
+    {
+        $attributes['avatar'] = storeFile($attributes['avatar']);
+
+        return parent::update($id, $attributes);
+    }
+
 
 }

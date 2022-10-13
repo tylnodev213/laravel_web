@@ -22,9 +22,9 @@
                 <p class="search_box__form">Team</p>
                 <select name="team_id" class="search_box__form search_box__form--select">
                     <option value="">-Choose-</option>
-                    @foreach($teams as $id => $team)
-                        <option value="{{ $id }}" @selected( request()->get('team_id') == $id) >
-                            {{ $team }}
+                    @foreach($teams as $team)
+                        <option value="{{ $team->id }}" @selected( request()->get('team_id') == $team->id) >
+                            {{ $team->name }}
                         </option>
                     @endforeach
                 </select>
@@ -44,7 +44,7 @@
         </form>
     </div>
     <div class="row btn_export">
-        <a href="{{ route('Employee.export_file') }}" class="btn btn-primary">Export CSV</a>
+        <a href="{{ route('Employee.export_file',request()->all()) }}" class="btn btn-primary">Export CSV</a>
     </div>
     <div class="data">
         <div class="paginate">

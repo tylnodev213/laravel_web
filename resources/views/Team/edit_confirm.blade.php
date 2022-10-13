@@ -8,16 +8,16 @@
 @section('content')
     @include("layouts.navbar")
     <div class="flow_url">
-        <p>Team - Create</p>
+        <p><a href="{{route('Team.search')}}">Search </a><i class="arrow right"></i> Team - Edit Confirm</p>
     </div>
-    <form class="form_container" action="{{route('Team.update', $team->id)}}" method="POST"
+    <form class="form_container" action="{{route('Team.update', $team_upd->id)}}" method="POST"
           enctype="multipart/form-data">
         @csrf
         @method("PUT")
         <div class="form_box">
             <div class="row form_input">
                 <div class="col-md-2">ID</div>
-                <p class="col-md-4 search_box__form--input">{{$team->id}}</p>
+                <p class="col-md-4 search_box__form--input">{{$team_upd->id}}</p>
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Name*</div>
@@ -32,8 +32,9 @@
         </div>
         <div class="row submit_box">
             <a onclick="history.back()" class="btn search_box__btn__items">Back</a>
-            <input type="submit" value="Save" name="submit" onclick="return confirm('Are you sure?')"
-                   class="btn search_box__btn__items search_box__btn__items--blue">
+            <input type="button" name="submit" value="Save" id="submitBtn" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary" />
+            <!-- Modal -->
+            @include("layouts.modal")
         </div>
     </form>
 @endsection

@@ -13,7 +13,7 @@ class LoginController extends Controller
     {
         return view('Auth.login');
     }
-    public function process_login(Request $request)
+    public function processLogin(Request $request)
     {
         $email = $request->get('email');
         $password = $request->get('password');

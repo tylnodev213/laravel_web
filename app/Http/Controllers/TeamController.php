@@ -29,9 +29,11 @@ class TeamController extends Controller
         return view('Team.create');
     }
 
-    public function create_confirm(Request $request)
+    public function createConfirm(Request $request)
     {
-        $team = new Team($request->all());
+        $data = $request->all();
+
+        $team = new Team($data);
 
         return view('Team.create_confirm', ['team'=>$team]);
     }
@@ -39,9 +41,12 @@ class TeamController extends Controller
     public function store(Request $request)
     {
         try{
-            $teams = $this->teamRepository->create($request);
+            $data = $request->all();
+
+            $teams = $this->teamRepository->create($data);
         }catch (Exception $e) {
-            Log::info('Create team fail.', ['id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+            Log::error('Create team fail.', ['id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+
             return redirect()->route('Team.search')->withError(config('constants.message_create_fail'));
         }
 
@@ -53,22 +58,27 @@ class TeamController extends Controller
         return view('Team.edit', ['team' => $team]);
     }
 
-    public function edit_confirm(Request $request, Team $team)
+    public function editConfirm(Request $request, Team $team)
     {
-        $team_upd = new Team($request->all());
+        $data = $request->all();
+
+        $team_upd = new Team($data);
+        $team_upd->id = $team->id;
 
         return view('Team.edit_confirm', [
             'team_upd'=>$team_upd,
-            'team' => $team
         ]);
     }
 
     public function update(Request $request, $id)
     {
         try{
-            $teams = $this->teamRepository->update($id, $request);
+            $data = $request->all();
+
+            $teams = $this->teamRepository->update($id, $data);
         }catch (Exception $e) {
-            Log::info('Update team fail.', ['id'=>$id,'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+            Log::error('Update team fail.', ['id'=>$id,'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+
             return redirect()->route('Team.search')->withError(config('constants.message_update_fail'));
         }
 
@@ -80,7 +90,8 @@ class TeamController extends Controller
         try{
             $teams = $this->teamRepository->softDelete($id);
         }catch (Exception $e) {
-            Log::info('Delete team fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+            Log::error('Delete team fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+
             return redirect()->route('Team.search')->withError(config('constants.message_delete_fail'));
         }
 

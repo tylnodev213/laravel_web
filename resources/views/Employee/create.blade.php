@@ -25,18 +25,18 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <img src="{{ file_exists(config('constants.url_avatar').old('avatar')) ? config('constants.url_avatar').old('avatar') : config('constants.avatar_default') }}" class="avatar_profile"
+                <img src="{{ !empty(old('old_avatar')) ? config('constants.url_avatar').old('old_avatar') : config('constants.avatar_default') }}" class="avatar_profile"
                      id="preview">
-                <input type="hidden" name="old_avatar" value="{{old('avatar') ?? '' }}">
+                <input type="hidden" name="old_avatar" value="{{old('old_avatar') ?? '' }}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Team*</div>
                 <select name="team_id" class="search_box__form search_box__form--select">
                     <option value="">-Choose-</option>
-                    @foreach($teams as $id => $team)
+                    @foreach($teams as $team)
                         <option
-                            value="{{ $id }}" {{ old('team_id') !== null && old('team_id') == $id ? 'selected': '' }}>
-                            {{ $team }}
+                            value="{{ $team->id }}" @selected(old('team_id')==$team->id)>
+                            {{ $team->name }}
                         </option>
                     @endforeach
                 </select>

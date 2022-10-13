@@ -3,19 +3,37 @@
 namespace App\Exports;
 
 use App\Models\Employee;
+use App\Repositories\Employee\EmployeeRepository;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class EmployeesExport implements FromCollection
+class EmployeesExport implements FromView
 {
-    public function getCsvSettings(): array
+
+    use Exportable;
+
+    protected $team_id;
+    protected $name;
+    protected $email;
+    protected $employeeRepository;
+
+    public function __construct($condition = [])
     {
-        return [
-            'delimiter' => ';'
-        ];
+        $this->team_id = $condition['team_id'] ?? '';
+        $this->name = $condition['name'] ?? '';
+        $this->email = $condition['email'] ?? '';
     }
-    public function headings(): array
+
+    public function view(): View
     {
-        return ["ID", "Team", "Fullname", "Email"];
+        $team_id = $this->team_id;
+        $name = $this->name;
+        $email = $this->email;
+        return view('exports.employees', [
+            'employees' => $this->collection()
+            ]);
     }
 
     /**
@@ -23,6 +41,21 @@ class EmployeesExport implements FromCollection
     */
     public function collection()
     {
-        return Employee::get(['id','team_id','first_name', 'last_name', 'email']);
+        $team_id = $this->team_id;
+        $name = $this->name;
+        $email = $this->email;
+        $this->employeeRepository = \App::make(EmployeeRepository::class);
+        return $this->employeeRepository->model
+            ->when (!empty($team_id) , function ($query) use($team_id){
+                return $query->where('team_id', $team_id);
+            })
+            ->when (!empty($name) , function ($query) use($name){
+                return $query->where('first_name', 'LIKE', '%'.$name.'%')
+                    ->orWhere('last_name', 'LIKE', '%'.$name.'%');
+            })
+            ->when (!empty($email) , function ($query) use($email){
+                return $query->where('email', 'LIKE', '%'.$email.'%');
+            })
+            ->get();
     }
 }

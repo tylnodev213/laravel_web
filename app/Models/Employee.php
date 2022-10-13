@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Scopes\AncientScope;
+use App\Scopes\GlobalScope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +14,7 @@ class Employee extends Model
     public static function boot()
     {
         parent::boot();
-        static::addGlobalScope(new AncientScope);
+        static::addGlobalScope(new GlobalScope);
     }
     public $timestamps = false;
     protected $table = 'm_employees';
@@ -55,6 +55,22 @@ class Employee extends Model
 
     public function team() {
         return $this->belongsTo(Team::class,'team_id','id')->addSelect('name');
+    }
+
+    protected function firstName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+            set: fn ($value) => strtolower($value),
+        );
+    }
+
+    protected function lastName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+            set: fn ($value) => strtolower($value),
+        );
     }
 
     protected function fullName(): Attribute

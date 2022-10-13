@@ -2,12 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Repositories\RepositoryInterface;
-use PHPUnit\Exception;
-
 abstract class BaseRepository implements RepositoryInterface
 {
-    protected $model;
+    public $model;
 
     public function __construct()
     {
@@ -28,9 +25,19 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->all();
     }
 
+    public function get($columns = [])
+    {
+        return $this->model->all($columns);
+    }
+
     public function find($id)
     {
         return $this->model->findOrFail($id);
+    }
+
+    public function findByField($column,$value)
+    {
+        return $this->model->where($column,$value);
     }
 
     public function create($attributes = [])
@@ -73,16 +80,4 @@ abstract class BaseRepository implements RepositoryInterface
         return false;
     }
 
-    public function delete($id)
-    {
-        $result = $this->find($id);
-
-        if ($result->count()) {
-            $result->delete();
-
-            return true;
-        }
-
-        return false;
-    }
 }

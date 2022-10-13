@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-
+    // Logging
+    'log' => 'daily',
+    'log_max_files' => 30,
     /*
     |--------------------------------------------------------------------------
     | Application Name

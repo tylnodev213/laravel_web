@@ -16,13 +16,13 @@
             <div class="row form_input">
                 <div class="col-md-2">Avatar</div>
                 <img src="{{$employee->getAvatar}}" class="avatar_profile" id="preview">
-                <input type="hidden" name="avatar" value="{{$employee->avatar}}">
+                <input type="hidden" name="old_avatar" value="{{$employee->avatar}}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Team</div>
                 <input class="col-md-4 search_box__form--input input--confirm" type="hidden" name="team_id"
-                       value="{{ $employee->team_id }}">
-                <div class="col-md-4 search_box__form--input">{{ $teams[$employee->team_id] }}</div>
+                       value="{{ $employee->team->id }}">
+                <div class="col-md-4 search_box__form--input">{{ $employee->team->name }}</div>
             </div>
             <div class="row form_input">
                 <div class="col-md-2">First Name</div>
@@ -84,8 +84,9 @@
         <div class="row submit_box">
             <input type="submit" value="Back" name="submit"
                    class="btn search_box__btn__items">
-            <input type="submit" value="Save" name="submit" onclick="return confirm('Are you sure?')"
-                   class="btn search_box__btn__items search_box__btn__items--blue">
+            <input type="button" name="submit" value="Save" id="submitBtn" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary" />
+            <!-- Modal -->
+            @include("layouts.modal")
         </div>
     </form>
 @endsection

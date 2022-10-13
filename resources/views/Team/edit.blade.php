@@ -8,7 +8,7 @@
 @section('content')
     @include("layouts.navbar")
     <div class="flow_url">
-        <p>Team - Create</p>
+        <p><a href="{{route('Team.search')}}">Search </a><i class="arrow right"></i> Team Edit</p>
     </div>
     <form class="form_container" action="{{route('Team.edit_confirm', $team->id)}}" method="POST"
           enctype="multipart/form-data">

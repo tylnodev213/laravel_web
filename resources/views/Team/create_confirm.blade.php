@@ -21,8 +21,9 @@
         </div>
         <div class="row submit_box">
             <a onclick="history.back()" class="btn search_box__btn__items">Back</a>
-            <input type="submit" value="Save" name="submit" onclick="return confirm('Are you sure?')"
-                   class="btn search_box__btn__items search_box__btn__items--blue">
+            <input type="button" name="submit" value="Save" id="submitBtn" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary" />
+            <!-- Modal -->
+            @include("layouts.modal")
         </div>
     </form>
 @endsection

@@ -4,12 +4,15 @@ namespace App\Repositories\Team;
 use App\Models\Team;
 use App\Repositories\BaseRepository;
 use App\Repositories\Employee\EmployeeRepository;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 {
+    protected $employeeRepository;
+
     //lấy model tương ứng
     public function getModel()
     {
@@ -35,23 +38,23 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         return $data;
     }
 
+
     public function softDelete($team_id)
     {
+        $this->employeeRepository = \App::make(EmployeeRepository::class);
         DB::beginTransaction();
         try {
             $this->update($team_id,[
                 'del_flag'=>config('constants.DELETE_ON')
             ]);
-            DB::table('m_employees')->where('team_id',$team_id)
+            $this->employeeRepository->findByField('team_id',$team_id)
                 ->update([
-                    'team_id' => NULL,
-                    'upd_id'=>session()->get('id_admin'),
-                    'upd_datetime'=>date('Y-m-d H:i:s'),
-                    ]);
+                    'del_flag'=>config('constants.DELETE_ON')
+                ]);
             DB::commit();
         } catch (\Exception $e) {
+            Log::error('Delete team fail.', ['id'=>$team_id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
             DB::rollback();
-            throw new \Exception(config('constants.message_delete_fail'));
         }
     }
 }

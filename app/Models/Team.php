@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Scopes\AncientScope;
+use App\Scopes\GlobalScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +15,7 @@ class Team extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new AncientScope);
+        static::addGlobalScope(new GlobalScope);
     }
     protected $table = 'm_teams';
     protected $primaryKey = 'id';

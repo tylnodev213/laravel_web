@@ -8,9 +8,9 @@
 @section('content')
     @include("layouts.navbar")
     <div class="flow_url">
-        <p>Team - Edit</p>
+        <p><a href="{{route('Employee.search')}}">Search </a><i class="arrow right"></i> Employee - Edit Confirm</p>
     </div>
-    <form class="form_container" action="{{route('Employee.update', $employee->id)}}" method="POST"
+    <form class="form_container" action="{{route('Employee.update', $employee->id)}}" method="POST" id="myForm"
           enctype="multipart/form-data">
         @csrf
         @method("PUT")
@@ -90,8 +90,9 @@
         <div class="row submit_box">
             <input type="submit" value="Back" name="submit"
                    class="btn search_box__btn__items">
-            <input type="submit" value="Save" name="submit" onclick="return confirm('Are you sure?')"
-                   class="btn search_box__btn__items search_box__btn__items--blue">
+            <input type="button" name="submit" value="Save" id="submitBtn" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary" />
+            <!-- Modal -->
+            @include("layouts.modal")
         </div>
     </form>
 @endsection

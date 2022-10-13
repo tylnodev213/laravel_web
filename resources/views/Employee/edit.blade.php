@@ -8,7 +8,7 @@
 @section('content')
     @include("layouts.navbar")
     <div class="flow_url">
-        <p>Team - Edit</p>
+        <p><a href="{{route('Employee.search')}}">Search </a><i class="arrow right"></i> Employee Edit</p>
     </div>
     <form class="form_container" action="{{route('Employee.edit_confirm', $employee->id)}}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -34,9 +34,9 @@
             <div class="row form_input">
                 <div class="col-md-2">Team*</div>
                 <select name="team_id" class="search_box__form search_box__form--select">
-                    @foreach($teams as $id => $team)
-                        <option value="{{ $id }}" {{ old('team_id') == $id || $employee->team_id == $id ? "selected" : "" }}>
-                            {{ $team }}
+                    @foreach($teams as $team)
+                        <option value="{{ $team->id }}" {{ old('team_id') == $team->id || $employee->team_id == $team->id ? "selected" : "" }}>
+                            {{ $team->name }}
                         </option>
                     @endforeach
                 </select>

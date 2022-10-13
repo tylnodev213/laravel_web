@@ -6,9 +6,13 @@ use Illuminate\Support\Str;
 
 function storeFile($request)
 {
-    $path = Storage::putFile(
-        config('constants.folder_avatar'), $request->file('avatar')
-    );
+    try{
+        $path = Storage::putFile(
+            config('constants.folder_avatar'), $request->file('avatar')
+        );
+    }catch (RunTimeException  $e){
+        return null;
+    }
 
     return Str::of($path)->after(config('constants.url_avatar'));
 }
