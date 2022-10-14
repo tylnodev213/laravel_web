@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Team\DeleteRequest;
+use App\Http\Requests\Team\StoreRequest;
+use App\Http\Requests\Team\UpdateRequest;
 use App\Models\Team;
 use App\Repositories\Repository;
 use Illuminate\Contracts\View\Factory;
@@ -29,7 +32,7 @@ class TeamController extends Controller
         return view('Team.create');
     }
 
-    public function createConfirm(Request $request)
+    public function createConfirm(StoreRequest $request)
     {
         $data = $request->all();
 
@@ -40,6 +43,10 @@ class TeamController extends Controller
 
     public function store(Request $request)
     {
+        if($request->get('submit')== 'Back') {
+            return redirect()->route('Team.create')->withInput($request->input());
+        }
+
         try{
             $data = $request->all();
 
@@ -58,7 +65,7 @@ class TeamController extends Controller
         return view('Team.edit', ['team' => $team]);
     }
 
-    public function editConfirm(Request $request, Team $team)
+    public function editConfirm(UpdateRequest $request, Team $team)
     {
         $data = $request->all();
 
@@ -70,8 +77,11 @@ class TeamController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
+        if($request->get('submit')== 'Back') {
+            return redirect()->route('Team.edit',$id)->withInput($request->input());
+        }
         try{
             $data = $request->all();
 
@@ -85,7 +95,7 @@ class TeamController extends Controller
         return redirect()->route('Team.search')->with('message_successful', config('constants.message_update_successful'));
     }
 
-    public function destroy($id)
+    public function destroy(DeleteRequest $request,$id)
     {
         try{
             $teams = $this->teamRepository->softDelete($id);

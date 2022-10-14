@@ -29,7 +29,7 @@ class EmployeeController extends Controller
     public function index(Request $request)
     {
         $this->removeAvatarWhenReset();
-        
+
         $employees = $this->repository->show($request);
 
         return view('Employee.index', [
@@ -93,7 +93,6 @@ class EmployeeController extends Controller
 
     public function edit(Employee $employee)
     {
-        //dd(session('old_avatar'));
         if(session('removeFile')) {
             $this->removeAvatarWhenReset();
         }
@@ -118,7 +117,6 @@ class EmployeeController extends Controller
             'removeFile' => false,
         ]);
 
-        //dd(session('old_avatar'));
         $data = array_merge($data,[
             'avatar' => $avatar,
         ]);

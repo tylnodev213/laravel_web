@@ -32,6 +32,16 @@ return [
 
     //EMAIL CONFIG
     'email_address' => 'duonght.paraline@gmail.com',
+
+    // ACCOUNT ADMIN
+    'username' => 'admin@gmail.com',
+    'password' => '123456',
+
+    //VALIDATE MESSAGE
+    'input_blank' => 'can not be blank',
+    'incorrect_format' => 'entered is not in the correct format',
+    'incorrect_min_length' => 'must be at least 8 characters',
+    'duplicate_value' => 'has existed',
 ]
 
 ?>

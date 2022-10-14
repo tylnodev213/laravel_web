@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Team;
 
+use App;
 use App\Models\Team;
 use App\Repositories\BaseRepository;
 use App\Repositories\Employee\EmployeeRepository;
@@ -44,16 +45,17 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $this->employeeRepository = \App::make(EmployeeRepository::class);
         DB::beginTransaction();
         try {
-            $this->update($team_id,[
-                'del_flag'=>config('constants.DELETE_ON')
+            $this->update($team_id, [
+                'del_flag' => config('constants.DELETE_ON')
             ]);
-            $this->employeeRepository->findByField('team_id',$team_id)
+            $this->employeeRepository->findByField('team_id', $team_id)
                 ->update([
-                    'del_flag'=>config('constants.DELETE_ON')
+                    'team_id' => null
                 ]);
             DB::commit();
-        } catch (\Exception $e) {
-            Log::error('Delete team fail.', ['id'=>$team_id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+        } catch (Exception $e) {
+            Log::error('Delete team fail.',
+                ['id' => $team_id, 'id_admin' => session()->get('id_admin'), 'exception' => $e->getMessage()]);
             DB::rollback();
         }
     }

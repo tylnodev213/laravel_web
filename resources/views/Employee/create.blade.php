@@ -197,8 +197,7 @@
         </div>
         <div class="row submit_box">
             <a href="{{ route('Employee.create') }}" class="btn reset-btn search_box__btn__items">Reset</a>
-            <input type="submit" value="Confirm" name="save"
-                   class="search_box__btn__items search_box__btn__items--blue">
+            <input type="submit" value="Confirm" name="save" class="search_box__btn__items search_box__btn__items--blue">
         </div>
     </form>
 @endsection

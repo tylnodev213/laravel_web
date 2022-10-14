@@ -21,18 +21,18 @@
             <div class="row form_input">
                 <div class="col-md-2">Name*</div>
                 <input type="text" name="name" maxlength="128" class="col-md-4 search_box__form--input"
-                       value="{{$team->name}}">
+                       value="{{old('name') ?? $team->name}}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('name'))
+                    <p class="help is-danger text-danger">{{ $errors->first('name') }}</p>
+                @endif
             </div>
         </div>
         <div class="row submit_box">
             <a href="{{ route('Team.edit', $team) }}" class="btn reset-btn search_box__btn__items">Reset</a>
-            <input type="submit" value="Confirm" name="save"
-                   class="search_box__btn__items search_box__btn__items--blue">
+            <input type="submit" value="Confirm" name="save" class="search_box__btn__items search_box__btn__items--blue">
         </div>
     </form>
 @endsection

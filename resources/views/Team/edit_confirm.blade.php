@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="row submit_box">
-            <a onclick="history.back()" class="btn search_box__btn__items">Back</a>
+            <input type="submit" value="Back" name="submit" class="btn search_box__btn__items">
             <input type="button" name="submit" value="Save" id="submitBtn" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary" />
             <!-- Modal -->
             @include("layouts.modal")

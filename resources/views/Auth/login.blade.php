@@ -10,23 +10,26 @@
     <div id="formContent">
         <form action="{{route('process_login')}}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div>
+            <div class="form_container">
                 <label for="email">Email</label>
             </div>
-            <input type="text" id="email" name="email" value="">
-            <div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+            <input type="text" id="email" name="email" value="{{ old('email') }}">
+            <div class="form_container">
+                @if ($errors->has('email'))
+                    <p class="help is-danger text-danger">{{ $errors->first('email') }}</p>
+                @endif
             </div>
-            <div>
+            <div class="form_container">
                 <label for="password">Password</label>
             </div>
-            <input type="password" id="password" name="password" value="">
-            <div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+            <input type="password" id="password" name="password" value="{{ old('password') }}">
+            <div class="form_container">
+                @if ($errors->has('password'))
+                    <p class="help is-danger text-danger">{{ $errors->first('password') }}</p>
+                @endif
             </div>
-            <div class="row">
+            <div class="form-group"></div>
+            <div class="row form-group">
                 <input type="submit" name="submit" value="Log In">
             </div>
         </form>
