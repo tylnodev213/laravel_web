@@ -21,14 +21,14 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Avatar</div>
-                <img src="{{url('storage')}}/app/{{ $employee->getAvatar }}" class="avatar_profile" id="preview">
-                <input type="hidden" name="avatar" value="{{ $employee->getAvatar }}">
+                <img src="{{ $employee->getAvatar }}" class="avatar_profile" id="preview">
+                <input type="hidden" name="avatar" value="{{ $employee->avatar }}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Team</div>
                 <input class="col-md-4 search_box__form--input input--confirm" type="hidden" name="team_id"
                        value="{{ $employee->team_id }}">
-                <div class="col-md-4 search_box__form--input">{{ $teams[$employee->team_id] }}</div>
+                <div class="col-md-4 search_box__form--input">{{ $employee->team->name }}</div>
             </div>
             <div class="row form_input">
                 <div class="col-md-2">First Name</div>

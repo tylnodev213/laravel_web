@@ -16,7 +16,7 @@
         <div class="form_box">
             <div class="row form_input">
                 <label class="col-md-2" for="inputGroupFile" aria-describedby="inputGroupFileAddon">Avatar*</label>
-                <input type="file" class="col-md-4 file_upload" name="avatar" id="inputGroupFile">
+                <input type="file" class="col-md-4 file_upload" name="avatarFile" id="inputGroupFile">
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
@@ -25,9 +25,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <img src="{{ !empty(old('old_avatar')) ? config('constants.url_avatar').old('old_avatar') : config('constants.avatar_default') }}" class="avatar_profile"
+                <img src="{{ !empty(old('avatar')) ? config('constants.url_avatar').old('avatar') : config('constants.avatar_default') }}" class="avatar_profile"
                      id="preview">
-                <input type="hidden" name="old_avatar" value="{{old('old_avatar') ?? '' }}">
+                <input type="hidden" name="old_avatar" value="{{old('avatar') ?? '' }}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Team*</div>

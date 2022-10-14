@@ -9,6 +9,7 @@ use App\Models\Team;
 use App\Repositories\Team\TeamRepository;
 use Illuminate\Http\Request;
 use App\Repositories\Employee\EmployeeRepositoryInterface;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -27,6 +28,8 @@ class EmployeeController extends Controller
 
     public function index(Request $request)
     {
+        $this->removeAvatarWhenReset();
+        
         $employees = $this->repository->show($request);
 
         return view('Employee.index', [
@@ -37,6 +40,7 @@ class EmployeeController extends Controller
 
     public function create()
     {
+        $this->removeAvatarWhenReset();
         return view('Employee.create', [
             'teams'=>$this->teams,
         ]);
@@ -51,6 +55,8 @@ class EmployeeController extends Controller
         if(empty($avatar)) {
             $avatar = $request->get('old_avatar');
         }
+
+        removeFile($request->get('old_avatar'));
 
         $data = array_merge($data,[
             'avatar' => $avatar,
@@ -67,6 +73,7 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         if($request->get('submit')== 'Back') {
+            session()->put('old_avatar',$request->get('avatar'));
             return redirect()->route('Employee.create')->withInput($request->input());
         }
 
@@ -86,6 +93,11 @@ class EmployeeController extends Controller
 
     public function edit(Employee $employee)
     {
+        //dd(session('old_avatar'));
+        if(session('removeFile')) {
+            $this->removeAvatarWhenReset();
+        }
+        session(['removeFile' => true,]);
         return view('Employee.edit', [
             'employee' => $employee,
             'teams' => $this->teams,
@@ -94,7 +106,22 @@ class EmployeeController extends Controller
 
     public function editConfirm(Request $request, Employee $employee)
     {
-        $data = $request->all();
+        $data = $request->except('avatar','old_avatar');
+
+        $avatar = storeFile($request);
+
+        if(empty($avatar)) {
+            $avatar = $request->get('old_avatar');
+        }
+        session([
+            'old_avatar' => $avatar,
+            'removeFile' => false,
+        ]);
+
+        //dd(session('old_avatar'));
+        $data = array_merge($data,[
+            'avatar' => $avatar,
+        ]);
 
         $employee_upd = new Employee($data);
         $employee_upd->id = $employee->id;
@@ -139,14 +166,19 @@ class EmployeeController extends Controller
         return redirect()->route('Employee.search')->with('message_successful',config('constants.message_delete_successful'));
     }
 
-    function exportFile(Request $request) {
+    public function exportFile(Request $request) {
         return Excel::download(new EmployeesExport($request->all()), 'employees.csv');
     }
 
-    function sendEmail($new_employee) {
+    public function sendEmail($new_employee) {
         $message = [
             'fullName' => $new_employee->fullName,
         ];
         SendEmail::dispatch($message, $new_employee)->delay(now()->addMinute(1));
+    }
+
+    public function removeAvatarWhenReset(){
+        removeFile(session()->get('old_avatar'));
+        session()->pull('old_avatar');
     }
 }

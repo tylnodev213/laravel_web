@@ -26,7 +26,7 @@ return [
     //URL CONFIG
     'folder_avatar' => 'avatars',
 
-    'url_avatar' => 'http://localhost/example-app/storage/app/',
+    'url_avatar' => 'http://localhost/example-app/storage/app/avatars/',
 
     'avatar_default' => 'http://localhost/example-app/storage/app/avatars/avatar_default.png',
 

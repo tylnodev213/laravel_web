@@ -6,18 +6,23 @@ use Illuminate\Support\Str;
 
 function storeFile($request)
 {
-    try{
+    try {
         $path = Storage::putFile(
-            config('constants.folder_avatar'), $request->file('avatar')
+            config('constants.folder_avatar'), $request->file('avatarFile')
         );
-    }catch (RunTimeException  $e){
+    }catch (Throwable  $e){
         return null;
     }
 
-    return Str::of($path)->after(config('constants.url_avatar'));
+    return Str::of($path)->after(config('constants.url_avatar'))->value();
 }
 
 function removeFile($file_name)
 {
-    Storage::delete($file_name);
+    try {
+        Storage::delete($file_name);
+    }catch (Throwable  $e){
+        return null;
+    }
+
 }
