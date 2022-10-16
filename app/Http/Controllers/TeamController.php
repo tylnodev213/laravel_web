@@ -10,6 +10,7 @@ use App\Repositories\Repository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use App\Repositories\Team\TeamRepositoryInterface;
+use Illuminate\Support\Facades\Log;
 
 class TeamController extends Controller
 {
@@ -51,7 +52,7 @@ class TeamController extends Controller
             $data = $request->all();
 
             $teams = $this->teamRepository->create($data);
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             Log::error('Create team fail.', ['id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
 
             return redirect()->route('Team.search')->withError(config('constants.message_create_fail'));
@@ -86,7 +87,7 @@ class TeamController extends Controller
             $data = $request->all();
 
             $teams = $this->teamRepository->update($id, $data);
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             Log::error('Update team fail.', ['id'=>$id,'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
 
             return redirect()->route('Team.search')->withError(config('constants.message_update_fail'));
@@ -95,11 +96,12 @@ class TeamController extends Controller
         return redirect()->route('Team.search')->with('message_successful', config('constants.message_update_successful'));
     }
 
-    public function destroy(DeleteRequest $request,$id)
+    public function destroy(Request $request)
     {
+        $id = $request->get('id');
         try{
             $teams = $this->teamRepository->softDelete($id);
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             Log::error('Delete team fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
 
             return redirect()->route('Team.search')->withError(config('constants.message_delete_fail'));

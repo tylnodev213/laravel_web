@@ -4,6 +4,7 @@ namespace App\Http\Requests\Team;
 
 use App\Models\Team;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DeleteRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'course' => [
+            'team' => [
                 'required',
                 Rule::exists(Team ::class, 'id')
             ],
@@ -34,6 +35,6 @@ class DeleteRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this->merge(['course' => $this->route('course')]);
+        $this->merge(['team' => $this->route('id')]);
     }
 }

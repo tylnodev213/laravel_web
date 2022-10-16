@@ -7,12 +7,19 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Employee\EmployeeRepository;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 class TeamRepository extends BaseRepository implements TeamRepositoryInterface
 {
     protected $employeeRepository;
+
+    public function __construct(EmployeeRepository $employeeRepository)
+    {
+        $this->employeeRepository = $employeeRepository;
+        $this->setModel();
+    }
 
     //lấy model tương ứng
     public function getModel()
@@ -40,24 +47,31 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
     }
 
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws Exception
+     */
     public function softDelete($team_id)
     {
-        $this->employeeRepository = \App::make(EmployeeRepository::class);
         DB::beginTransaction();
         try {
             $this->update($team_id, [
-                'del_flag' => config('constants.DELETE_ON')
+                'del_flag' => config('constants.DELETE_ON'),
             ]);
-            $this->employeeRepository->findByField('team_id', $team_id)
-                ->update([
-                    'team_id' => null
+            $employees = $this->employeeRepository->findByField('team_id', $team_id);
+            if ($employees->count()) {
+                $employees->toQuery()->update([
+                    'team_id' => null,
                 ]);
-            DB::commit();
+            }
         } catch (Exception $e) {
             Log::error('Delete team fail.',
                 ['id' => $team_id, 'id_admin' => session()->get('id_admin'), 'exception' => $e->getMessage()]);
             DB::rollback();
+            throw $e;
         }
+        DB::commit();
     }
 }
 

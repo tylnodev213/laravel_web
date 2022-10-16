@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+
 abstract class BaseRepository implements RepositoryInterface
 {
     public $model;
@@ -37,7 +38,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function findByField($column,$value)
     {
-        return $this->model->where($column,$value);
+        return $this->model->where($column,'=',$value)->get();
     }
 
     public function create($attributes = [])

@@ -69,12 +69,9 @@
                         <td class="column col-md-7">{{$team->name}}</td>
                         <td class="column text-center col-md-2">
                             <a href="{{route('Team.edit', $team)}}" class="btn btn-edit">Edit</a>
-                            <form action="{{route('Team.destroy', $team)}}" method="POST" style="display:inline">
-                                @csrf
-                                @method('DELETE')
-                                <button onclick="return confirm('Are you sure?')" class="btn btn-del" id="delete">Delete
-                                </button>
-                            </form>
+                            <a href="#" data-id="{{ $team->id }}" class="btn btn-del delete" data-toggle="modal" data-target="#deleteModal">
+                                Delete
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -84,5 +81,7 @@
                 </tr>
             @endif
         </table>
+        <!-- Modal -->
+        @include("layouts.modalDelete")
     </div>
 @endsection
