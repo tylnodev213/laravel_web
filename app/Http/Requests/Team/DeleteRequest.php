@@ -26,15 +26,25 @@ class DeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'team' => [
+            'id' => [
                 'required',
-                Rule::exists(Team ::class, 'id')
+                Rule::exists(Team ::class, 'id'),
             ],
         ];
     }
 
-    protected function prepareForValidation()
+    public function messages()
     {
-        $this->merge(['team' => $this->route('id')]);
+        return [
+            'required' => ':attribute '.config('constants.input_blank'),
+            'exists'   => ':attribute '.config('constants.not_exist_value'),
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'id' => "Team's id",
+        ];
     }
 }

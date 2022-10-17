@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Employee\Gender;
+use App\Enums\Employee\Position;
+use App\Enums\Employee\Status;
+use App\Enums\Employee\TypeOfWork;
 use App\Exports\EmployeesExport;
 use App\Jobs\SendEmail;
 use App\Models\Employee;
@@ -11,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Exception;
@@ -18,32 +23,43 @@ use Exception;
 class EmployeeController extends Controller
 {
     protected $repository;
-    protected $teams;
 
     public function __construct(EmployeeRepositoryInterface $employeeRepository, TeamRepository $teamRepository)
     {
         $this->repository = $employeeRepository;
-        $this->teams = $teamRepository->get(['id', 'name']);
+        $teams = $teamRepository->get(['id', 'name']);
+        $gender = Gender::getArrayView();
+        $position = Position::getArrayView();
+        $status = Status::getArrayView();
+        $typeOfWork = TypeOfWork::getArrayView();
+        View::share('teams',$teams);
+        View::share('gender',$gender);
+        View::share('position',$position);
+        View::share('status',$status);
+        View::share('typeOfWork',$typeOfWork);
     }
 
     public function index(Request $request)
     {
-        $this->removeAvatarWhenReset();
+        if(!session('removeFile')) {
+            $this->removeAvatarWhenReset();
+        }
+        session()->pull('old_avatar');
 
         $employees = $this->repository->show($request);
 
         return view('Employee.index', [
             'employees' => $employees,
-            'teams'=>$this->teams,
         ]);
     }
 
     public function create()
     {
-        $this->removeAvatarWhenReset();
-        return view('Employee.create', [
-            'teams'=>$this->teams,
-        ]);
+        if(!session('removeFile')) {
+            $this->removeAvatarWhenReset();
+        }
+        session()->pull('old_avatar');
+        return view('Employee.create');
     }
 
     public function createConfirm(Request $request)
@@ -66,7 +82,6 @@ class EmployeeController extends Controller
 
         return view('Employee.create_confirm', [
             'employee'=>$employee,
-            'teams'=>$this->teams,
         ]);
     }
 
@@ -99,7 +114,6 @@ class EmployeeController extends Controller
         session(['removeFile' => true,]);
         return view('Employee.edit', [
             'employee' => $employee,
-            'teams' => $this->teams,
         ]);
     }
 
@@ -126,7 +140,6 @@ class EmployeeController extends Controller
 
         return view('Employee.edit_confirm', [
             'employee' => $employee_upd,
-            'teams' => $this->teams,
         ]);
     }
 
@@ -147,12 +160,13 @@ class EmployeeController extends Controller
         }
 
         $this->sendEmail($upd_employee);
-
+        session(['removeFile' => true,]);
         return redirect()->route('Employee.search')->with('message_successful',config('constants.message_update_successful'));
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request)
     {
+        $id = $request->get('id');
         try{
             $data=$this->repository->softDelete($id);
         }catch (Exception $e) {
@@ -177,6 +191,5 @@ class EmployeeController extends Controller
 
     public function removeAvatarWhenReset(){
         removeFile(session()->get('old_avatar'));
-        session()->pull('old_avatar');
     }
 }

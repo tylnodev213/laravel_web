@@ -14,6 +14,8 @@
             </div>
         @elseif (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
+            elseif($errors->has('id'))
+            <div class="alert alert-danger">{{ $errors->first('id') }}</div>
         @endif
     </div>
     <div class="search_box">
@@ -117,12 +119,7 @@
                         <td class="column ">{{$employee->email}}</td>
                         <td class="column text-center">
                             <a href="{{route('Employee.edit', $employee)}}" class="btn btn-edit">Edit</a>
-                            <form action="{{route('Employee.destroy', $employee)}}" method="POST" style="display:inline">
-                                @csrf
-                                @method('DELETE')
-                                <button onclick="return confirm('Are you sure?')" class="btn btn-del" id="delete">Delete
-                                </button>
-                            </form>
+                            <a href="#" data-id="{{ $employee->id }}" class="btn btn-del delete" data-toggle="modal" data-target="#deleteModal">Delete</a>
                         </td>
                     </tr>
                 @endforeach
@@ -133,4 +130,16 @@
             @endif
         </table>
     </div>
+@endsection
+@extends("modal.modalDelete")
+@section('formDelete')
+    <form action="{{ route('Employee.destroy', 'id') }}" method="post" id="myForm">
+        @csrf
+        @method('DELETE')
+        <input id="id_delete" type="hidden" name="id" >
+        <div class="modal-footer row" style="justify-content: space-between;">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button id="submit" class="btn btn-success success">OK</button>
+        </div>
+    </form>
 @endsection

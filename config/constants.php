@@ -42,6 +42,7 @@ return [
     'incorrect_format' => 'entered is not in the correct format',
     'incorrect_min_length' => 'must be at least 8 characters',
     'duplicate_value' => 'has existed',
+    'not_exist_value' => "not found!",
 ]
 
 ?>

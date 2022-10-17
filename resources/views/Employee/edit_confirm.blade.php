@@ -89,9 +89,10 @@
         </div>
         <div class="row submit_box">
             <input type="submit" value="Back" name="submit" class="btn search_box__btn__items">
-            <input type="button" name="submit" value="Save" id="submitBtn" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary" />
+            <input type="button" name="submit" value="Save" id="submitBtn" data-toggle="modal"
+                   data-target="#exampleModal" class="btn btn-primary"/>
             <!-- Modal -->
-            @include("layouts.modal")
+            @include("modal.modalConfirm")
         </div>
     </form>
 @endsection

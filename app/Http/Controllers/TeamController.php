@@ -78,7 +78,7 @@ class TeamController extends Controller
         ]);
     }
 
-    public function update(UpdateRequest $request, $id)
+    public function update(Request $request, $id)
     {
         if($request->get('submit')== 'Back') {
             return redirect()->route('Team.edit',$id)->withInput($request->input());
@@ -96,7 +96,7 @@ class TeamController extends Controller
         return redirect()->route('Team.search')->with('message_successful', config('constants.message_update_successful'));
     }
 
-    public function destroy(Request $request)
+    public function destroy(DeleteRequest $request)
     {
         $id = $request->get('id');
         try{

@@ -79,12 +79,10 @@
             <div class="row form_input">
                 <div class="col-md-2">Gender*</div>
                 <input type="hidden" name="gender" value="">
-                <input type="radio" name="gender" value="1"
-                       class="col-md-1 form_input" {{ old('gender') !== null && old('gender') == '1' ? 'checked' : '' }}>
-                <label class="col-md-2 form_input">Male</label>
-                <input type="radio" name="gender" value="2"
-                       class="col-md-1 form_input" {{ old('gender') !== null && old('gender') == '2' ? 'checked' : '' }}>
-                <label class="col-md-2 form_input">Female</label>
+                @foreach($gender as $option => $value)
+                    <input type="radio" name="gender" value="{{ $value }}" class="col-md-1 form_input" @checked(old('gender') == $value)>
+                    <label class="col-md-2 form_input">{{ $option }}</label>
+                @endforeach
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
@@ -128,21 +126,11 @@
                     <option value="">
                         -Choose-
                     </option>
-                    <option value="1" {{ old('position') !== null && old('position') == '1' ? 'selected': '' }}>
-                        Manager
-                    </option>
-                    <option value="2" {{ old('position') !== null && old('position') == '2' ? 'selected': '' }}>
-                        Team leader
-                    </option>
-                    <option value="3" {{ old('position') !== null && old('position') == '3' ? 'selected': '' }}>
-                        BSE
-                    </option>
-                    <option value="4" {{ old('position') !== null && old('position') == '4' ? 'selected': '' }}>
-                        Dev
-                    </option>
-                    <option value="5" {{ old('position') !== null && old('position') == '5' ? 'selected': '' }}>
-                        Tester
-                    </option>
+                    @foreach($position as $option => $value)
+                        <option value="{{ $value }}" @selected(old('position') == $value) >
+                            {{ $option }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
             <div class="row form_input">
@@ -156,22 +144,11 @@
                     <option value="">
                         -Choose-
                     </option>
-                    <option
-                        value="1" {{ old('type_of_work') !== null && old('type_of_work') == '1' ? 'selected': '' }}>
-                        Fulltime
-                    </option>
-                    <option
-                        value="2" {{ old('type_of_work') !== null && old('type_of_work')  == '2' ? 'selected': '' }}>
-                        Partime
-                    </option>
-                    <option
-                        value="3" {{ old('type_of_work') !== null && old('type_of_work')  == '3' ? 'selected': '' }}>
-                        Probationary Staff
-                    </option>
-                    <option
-                        value="4" {{ old('type_of_work') !== null && old('type_of_work')  == '4' ? 'selected': '' }}>
-                        Intern
-                    </option>
+                    @foreach($typeOfWork as $option => $value)
+                        <option value="{{ $value }}" @selected(old('type_of_work') == $value) >
+                            {{ $option }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
             <div class="row form_input">
@@ -182,12 +159,10 @@
             <div class="row form_input">
                 <div class="col-md-2">Status*</div>
                 <input type="hidden" name="status" value="">
-                <input type="radio" name="status" value="1"
-                       class="col-md-1 form_input" {{ old('status') !== null && old('status') == '1' ? 'checked' : '' }}>
-                <label class="col-md-2 form_input">On working</label>
-                <input type="radio" name="status" value="2"
-                       class="col-md-1 form_input" {{ old('status') !== null && old('status') == '2' ? 'checked' : '' }}>
-                <label class="col-md-2 form_input">Retired</label>
+                @foreach($status as $option => $value)
+                    <input type="radio" name="status" value="{{ $value }}" class="col-md-1 form_input" @checked(old('status') == $value)>
+                    <label class="col-md-2 form_input">{{ $option }}</label>
+                @endforeach
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>

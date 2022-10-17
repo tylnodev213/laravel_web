@@ -14,13 +14,16 @@
             </div>
         @elseif (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
+        @elseif($errors->has('id'))
+            <div class="alert alert-danger">{{ $errors->first('id') }}</div>
         @endif
     </div>
     <div class="search_box">
         <form action="" id="myForm">
             <div class="row">
                 <p class="search_box__form">Name</p>
-                <input type="text" class="search_box__form search_box__form--input" name="name" value="{{ request()->get('name') ?? '' }}">
+                <input type="text" class="search_box__form search_box__form--input" name="name"
+                       value="{{ request()->get('name') ?? '' }}">
             </div>
             <div class="row search_box__btn">
                 <a href="{{ route('Team.search') }}" class="btn reset-btn search_box__btn__items">Reset</a>
@@ -69,9 +72,7 @@
                         <td class="column col-md-7">{{$team->name}}</td>
                         <td class="column text-center col-md-2">
                             <a href="{{route('Team.edit', $team)}}" class="btn btn-edit">Edit</a>
-                            <a href="#" data-id="{{ $team->id }}" class="btn btn-del delete" data-toggle="modal" data-target="#deleteModal">
-                                Delete
-                            </a>
+                            <a href="#" data-id="{{ $team->id }}" class="btn btn-del delete" data-toggle="modal" data-target="#deleteModal">Delete</a>
                         </td>
                     </tr>
                 @endforeach
@@ -81,7 +82,17 @@
                 </tr>
             @endif
         </table>
-        <!-- Modal -->
-        @include("layouts.modalDelete")
     </div>
+@endsection
+@extends("modal.modalDelete")
+@section('formDelete')
+    <form action="{{ route('Team.destroy', 'id') }}" method="post" id="myForm">
+        @csrf
+        @method('DELETE')
+        <input id="id_delete" type="hidden" name="id" >
+        <div class="modal-footer row" style="justify-content: space-between;">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button id="submit" class="btn btn-success success">OK</button>
+        </div>
+    </form>
 @endsection
