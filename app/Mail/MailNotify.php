@@ -28,6 +28,6 @@ class MailNotify extends Mailable
     {
         return $this->from(config('constants.email_address'))
             ->view('mails.mail-notify')
-            ->subject('Chào mừng ban gia nhập hệ thống!');
+            ->subject(config('constants.email_subject'));
     }
 }

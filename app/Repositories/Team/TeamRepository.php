@@ -66,8 +66,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 ]);
             }
         } catch (Exception $e) {
-            Log::error('Delete team fail.',
-                ['id' => $team_id, 'id_admin' => session()->get('id_admin'), 'exception' => $e->getMessage()]);
+            Log::error('Delete team fail.', ['id' => $team_id, 'id_admin' => session()->get('id_admin'), 'exception' => $e->getMessage()]);
             DB::rollback();
             throw $e;
         }

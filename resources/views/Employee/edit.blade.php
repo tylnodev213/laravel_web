@@ -19,12 +19,13 @@
             </div>
             <div class="row form_input">
                 <label class="col-md-2" for="inputGroupFile" aria-describedby="inputGroupFileAddon">Avatar*</label>
-                <input type="file" class="col-md-4 file_upload" name="avatarFile" id="inputGroupFile">
+                <input type="file" class="col-md-4 file_upload" name="avatar" id="inputGroupFile">
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if  ($errors->has('avatar'))
+                    <p class="help is-danger text-danger">{{ $errors->first('avatar') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
@@ -43,8 +44,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('team_id'))
+                    <p class="help is-danger text-danger">{{ $errors->first('team_id') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">First Name*</div>
@@ -52,8 +54,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('first_name'))
+                    <p class="help is-danger text-danger">{{ $errors->first('first_name') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Last Name*</div>
@@ -61,8 +64,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('last_name'))
+                    <p class="help is-danger text-danger">{{ $errors->first('last_name') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Email*</div>
@@ -70,8 +74,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('email'))
+                    <p class="help is-danger text-danger">{{ $errors->first('email') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Gender*</div>
@@ -83,8 +88,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('gender'))
+                    <p class="help is-danger text-danger">{{ $errors->first('gender') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Birthday*</div>
@@ -92,8 +98,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('birthday'))
+                    <p class="help is-danger text-danger">{{ $errors->first('birthday') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Address*</div>
@@ -101,8 +108,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('birthday'))
+                    <p class="help is-danger text-danger">{{ $errors->first('birthday') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Salary*</div>
@@ -111,8 +119,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('salary'))
+                    <p class="help is-danger text-danger">{{ $errors->first('salary') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Position*</div>
@@ -126,8 +135,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('position'))
+                    <p class="help is-danger text-danger">{{ $errors->first('position') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Type of work*</div>
@@ -141,8 +151,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('type_of_work'))
+                    <p class="help is-danger text-danger">{{ $errors->first('type_of_work') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Status*</div>
@@ -154,8 +165,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('status'))
+                    <p class="help is-danger text-danger">{{ $errors->first('status') }}</p>
+                @endif
             </div>
         </div>
         <div class="row submit_box">

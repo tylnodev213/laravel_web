@@ -16,7 +16,7 @@
             <div class="row form_input">
                 <div class="col-md-2">Avatar</div>
                 <img src="{{$employee->getAvatar}}" class="avatar_profile" id="preview">
-                <input type="hidden" name="avatar" value="{{$employee->avatar}}">
+                <input type="hidden" name="avatar" value="{{$employee->getAvatar}}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Team</div>

@@ -35,7 +35,7 @@ class TeamController extends Controller
 
     public function createConfirm(StoreRequest $request)
     {
-        $data = $request->all();
+        $data = $request->safe()->all();
 
         $team = new Team($data);
 
@@ -68,7 +68,7 @@ class TeamController extends Controller
 
     public function editConfirm(UpdateRequest $request, Team $team)
     {
-        $data = $request->all();
+        $data = $request->safe()->all();
 
         $team_upd = new Team($data);
         $team_upd->id = $team->id;

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Enums\Employee\Gender;
-use App\Enums\Employee\Position;
-use App\Enums\Employee\Status;
-use App\Enums\Employee\TypeOfWork;
+use App\Enums\Employee\GenderEnum;
+use App\Enums\Employee\PositionEnum;
+use App\Enums\Employee\StatusEnum;
+use App\Enums\Employee\TypeOfWorkEnum;
 use App\Scopes\GlobalScope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -81,7 +81,7 @@ class Employee extends Model
     protected function getGender(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => Gender::getKey((int)$attributes['gender']),
+            get: fn ($value, $attributes) => GenderEnum::getKey((int)$attributes['gender']),
         );
     }
 
@@ -95,21 +95,21 @@ class Employee extends Model
     protected function getPosition(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => Position::getKey((int)$attributes['position']),
+            get: fn ($value, $attributes) => PositionEnum::getKey((int)$attributes['position']),
         );
     }
 
     protected function getTypeOfWork(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => TypeOfWork::getKey((int)$attributes['type_of_work']),
+            get: fn ($value, $attributes) => TypeOfWorkEnum::getKey((int)$attributes['type_of_work']),
         );
     }
 
     protected function getStatus(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => Status::getKey((int)$attributes['status']),
+            get: fn ($value, $attributes) => StatusEnum::getKey((int)$attributes['status']),
         );
     }
 

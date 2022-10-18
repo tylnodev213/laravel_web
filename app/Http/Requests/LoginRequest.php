@@ -25,7 +25,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => 'bail|required|email',
-            'password' => 'bail|required|min:5',
+            'password' => 'bail|required',
         ];
     }
 
@@ -34,11 +34,7 @@ class LoginRequest extends FormRequest
         return [
             'email.required' => 'Email '.config('constants.input_blank'),
 
-            'email.email' => 'Email '.config('constants.incorrect_format'),
-
             'password.required' => 'Password '.config('constants.input_blank'),
-
-            'password.min' => 'Password '.config('constants.incorrect_min_length'),
         ];
     }
 }

@@ -14,7 +14,7 @@
             </div>
         @elseif (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
-            elseif($errors->has('id'))
+        @elseif($errors->has('id'))
             <div class="alert alert-danger">{{ $errors->first('id') }}</div>
         @endif
     </div>

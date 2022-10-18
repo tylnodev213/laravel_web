@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Employee\Gender;
-use App\Enums\Employee\Position;
-use App\Enums\Employee\Status;
-use App\Enums\Employee\TypeOfWork;
+use App\Enums\Employee\GenderEnum;
+use App\Enums\Employee\PositionEnum;
+use App\Enums\Employee\StatusEnum;
+use App\Enums\Employee\TypeOfWorkEnum;
 use App\Exports\EmployeesExport;
+use App\Http\Requests\Employee\DeleteRequest;
+use App\Http\Requests\Employee\StoreRequest;
+use App\Http\Requests\Employee\UpdateRequest;
 use App\Jobs\SendEmail;
 use App\Models\Employee;
 use App\Models\Team;
@@ -28,10 +31,10 @@ class EmployeeController extends Controller
     {
         $this->repository = $employeeRepository;
         $teams = $teamRepository->get(['id', 'name']);
-        $gender = Gender::getArrayView();
-        $position = Position::getArrayView();
-        $status = Status::getArrayView();
-        $typeOfWork = TypeOfWork::getArrayView();
+        $gender = GenderEnum::getArrayView();
+        $position = PositionEnum::getArrayView();
+        $status = StatusEnum::getArrayView();
+        $typeOfWork = TypeOfWorkEnum::getArrayView();
         View::share('teams',$teams);
         View::share('gender',$gender);
         View::share('position',$position);
@@ -62,17 +65,17 @@ class EmployeeController extends Controller
         return view('Employee.create');
     }
 
-    public function createConfirm(Request $request)
+    public function createConfirm(StoreRequest $request)
     {
-        $data = $request->except('avatar','old_avatar');
-
         $avatar = storeFile($request);
+
+        $data = $request->except('avatar','old_avatar');
 
         if(empty($avatar)) {
             $avatar = $request->get('old_avatar');
+        }else {
+            removeFile($request->get('old_avatar'));
         }
-
-        removeFile($request->get('old_avatar'));
 
         $data = array_merge($data,[
             'avatar' => $avatar,
@@ -88,7 +91,6 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         if($request->get('submit')== 'Back') {
-            session()->put('old_avatar',$request->get('avatar'));
             return redirect()->route('Employee.create')->withInput($request->input());
         }
 
@@ -117,9 +119,9 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function editConfirm(Request $request, Employee $employee)
+    public function editConfirm(UpdateRequest $request, Employee $employee)
     {
-        $data = $request->except('avatar','old_avatar');
+        $data = $request->safe()->except('avatar','old_avatar');
 
         $avatar = storeFile($request);
 
@@ -164,7 +166,7 @@ class EmployeeController extends Controller
         return redirect()->route('Employee.search')->with('message_successful',config('constants.message_update_successful'));
     }
 
-    public function destroy(Request $request)
+    public function destroy(DeleteRequest $request)
     {
         $id = $request->get('id');
         try{

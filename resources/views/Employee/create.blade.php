@@ -10,24 +10,24 @@
     <div class="flow_url">
         <p>Employee - Create</p>
     </div>
-    <form class="form_container" action="{{route('Employee.create_confirm')}}" method="POST"
-          enctype="multipart/form-data">
+    <form class="form_container" action="{{route('Employee.create_confirm')}}" method="POST" enctype="multipart/form-data"  >
         @csrf
         <div class="form_box">
             <div class="row form_input">
                 <label class="col-md-2" for="inputGroupFile" aria-describedby="inputGroupFileAddon">Avatar*</label>
-                <input type="file" class="col-md-4 file_upload" name="avatarFile" id="inputGroupFile">
+                <input type="file" class="col-md-4 file_upload" name="avatar" id="inputGroupFile" >
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if  ($errors->has('avatar'))
+                    <p class="help is-danger text-danger">{{ $errors->first('avatar') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <img src="{{ !empty(old('avatar')) ? config('constants.url_avatar').old('avatar') : config('constants.avatar_default') }}" class="avatar_profile"
+                <img src="{{ !empty(old('avatar')) ? old('avatar') : config('constants.avatar_default') }}" class="avatar_profile"
                      id="preview">
-                <input type="hidden" name="old_avatar" value="{{old('avatar') ?? '' }}">
+                <input type="hidden" id="b64" name="avatar" value="{{old('avatar') ?? '' }}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Team*</div>
@@ -43,8 +43,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('team_id'))
+                    <p class="help is-danger text-danger">{{ $errors->first('team_id') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">First Name*</div>
@@ -53,8 +54,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('first_name'))
+                    <p class="help is-danger text-danger">{{ $errors->first('first_name') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Last Name*</div>
@@ -63,8 +65,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('last_name'))
+                    <p class="help is-danger text-danger">{{ $errors->first('last_name') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Email*</div>
@@ -73,8 +76,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('email'))
+                    <p class="help is-danger text-danger">{{ $errors->first('email') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Gender*</div>
@@ -86,8 +90,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('gender'))
+                    <p class="help is-danger text-danger">{{ $errors->first('gender') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Birthday*</div>
@@ -96,8 +101,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('birthday'))
+                    <p class="help is-danger text-danger">{{ $errors->first('birthday') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Address*</div>
@@ -106,8 +112,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('address'))
+                    <p class="help is-danger text-danger">{{ $errors->first('address') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Salary*</div>
@@ -117,8 +124,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('salary'))
+                    <p class="help is-danger text-danger">{{ $errors->first('salary') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Position*</div>
@@ -135,8 +143,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('position'))
+                    <p class="help is-danger text-danger">{{ $errors->first('position') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Type of work*</div>
@@ -153,8 +162,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('type_of_work'))
+                    <p class="help is-danger text-danger">{{ $errors->first('type_of_work') }}</p>
+                @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Status*</div>
@@ -166,8 +176,9 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <p id="validate--username" class="validate"
-                   style="color:red; font-size:12px"></p>
+                @if ($errors->has('status'))
+                    <p class="help is-danger text-danger">{{ $errors->first('status') }}</p>
+                @endif
             </div>
         </div>
         <div class="row submit_box">

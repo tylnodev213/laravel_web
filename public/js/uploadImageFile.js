@@ -1,14 +1,17 @@
-$(document).ready(function(){
-    // get file and preview image
-    $("#inputGroupFile").on('change',function(){
-        var input = $(this)[0];
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#preview').attr('src', e.target.result).fadeIn('slow');
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    })
+function readFile() {
 
-})
+    if (!this.files || !this.files[0]) return;
+
+    const FR = new FileReader();
+
+    FR.addEventListener("load", function(evt) {
+        document.querySelector("#preview").src         = evt.target.result;
+        document.querySelector("#b64").value = evt.target.result;
+    });
+
+    FR.readAsDataURL(this.files[0]);
+
+}
+
+document.querySelector("#inputGroupFile").addEventListener("change", readFile);
+
