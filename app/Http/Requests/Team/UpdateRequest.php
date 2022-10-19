@@ -26,6 +26,11 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => [
+                'bail',
+                'required',
+                Rule::exists(Team ::class, 'id'),
+            ],
             'name' => [
                 'bail',
                 'required',
