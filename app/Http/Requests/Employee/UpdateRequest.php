@@ -83,6 +83,7 @@ class UpdateRequest extends FormRequest
                 'bail',
                 'required',
                 'numeric',
+                'integer',
                 'max:99999999999',
                 'min:0'
             ],
