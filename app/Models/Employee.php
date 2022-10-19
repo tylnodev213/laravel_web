@@ -10,6 +10,7 @@ use App\Scopes\GlobalScope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Employee extends Model
@@ -116,7 +117,7 @@ class Employee extends Model
     protected function getAvatar(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => config('constants.url_avatar').$attributes['avatar'],
+            get: fn ($value, $attributes) => Storage::exists(config('constants.folder_avatar').'/'.$attributes['avatar']) ? config('constants.url_avatar').$attributes['avatar'] : config('constants.avatar_default'),
         );
     }
 
