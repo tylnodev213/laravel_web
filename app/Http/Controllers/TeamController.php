@@ -55,14 +55,19 @@ class TeamController extends Controller
         }catch (\Exception $e) {
             Log::error('Create team fail.', ['id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
 
-            return redirect()->route('Team.search')->withError(config('constants.message_create_fail'));
+            return redirect()->route('Team.search')->withErrors(config('constants.message_create_fail'));
         }
 
         return redirect()->route('Team.search')->with('message_successful', config('constants.message_create_successful'));
     }
 
-    public function edit(Team $team)
+    public function edit($id)
     {
+        $team = $this->repository->findbyField('id',$id)->first();
+
+        if(is_null($team)) {
+            return redirect()->route('Team.search')->withErrors(config('constants.data_not_exist'));
+        }
         return view('Team.edit', ['team' => $team]);
     }
 
@@ -90,7 +95,7 @@ class TeamController extends Controller
         }catch (\Exception $e) {
             Log::error('Update team fail.', ['id'=>$id,'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
 
-            return redirect()->route('Team.search')->withError(config('constants.message_update_fail'));
+            return redirect()->route('Team.search')->withErrors(config('constants.message_update_fail'));
         }
 
         return redirect()->route('Team.search')->with('message_successful', config('constants.message_update_successful'));
@@ -104,7 +109,7 @@ class TeamController extends Controller
         }catch (\Exception $e) {
             Log::error('Delete team fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
 
-            return redirect()->route('Team.search')->withError(config('constants.message_delete_fail'));
+            return redirect()->route('Team.search')->withErrors(config('constants.message_delete_fail'));
         }
 
         return redirect()->route('Team.search')->with('message_successful',config('constants.message_delete_successful'));

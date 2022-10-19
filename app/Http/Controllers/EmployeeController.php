@@ -92,7 +92,7 @@ class EmployeeController extends Controller
             $new_employee = $this->repository->create($data);
         }catch (Exception $e) {
             Log::error('Create employee fail.', ['id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
-            return redirect()->route('Employee.search')->withError(config('constants.message_create_fail'));
+            return redirect()->route('Employee.search')->withErrors(config('constants.message_create_fail'));
         }
 
         $this->sendEmail($new_employee);
@@ -100,12 +100,19 @@ class EmployeeController extends Controller
         return redirect()->route('Employee.search')->with('message_successful', config('constants.message_create_successful'));
     }
 
-    public function edit(Employee $employee)
+    public function edit($id)
     {
         if(session('removeFile')) {
             $this->removeAvatarWhenReset();
         }
         session(['removeFile' => true,]);
+
+        $employee = $this->repository->findbyField('id',$id)->first();
+
+        if(is_null($employee)) {
+            return redirect()->route('Employee.search')->withErrors(config('constants.data_not_exist'));
+        }
+
         return view('Employee.edit', [
             'employee' => $employee,
         ]);
@@ -146,7 +153,7 @@ class EmployeeController extends Controller
         }catch (Exception $e) {
             Log::error('Update employee fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
 
-            return redirect()->route('Employee.search')->withError(config('constants.message_update_fail'));
+            return redirect()->route('Employee.search')->withErrors(config('constants.message_update_fail'));
         }
 
         $checkEmailExist = $this->repository->findByField('email', $data['email']);
@@ -161,12 +168,13 @@ class EmployeeController extends Controller
     public function destroy(DeleteRequest $request)
     {
         $id = $request->get('id');
+
         try{
-            $data=$this->repository->softDelete($id);
+            $data = $this->repository->softDelete($id);
         }catch (Exception $e) {
             Log::error('Delete employee fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
 
-            return redirect()->route('Employee.search')->withError(config('constants.message_delete_fail'));
+            return redirect()->route('Employee.search')->withErrors(config('constants.message_delete_fail'));
         }
 
         return redirect()->route('Employee.search')->with('message_successful',config('constants.message_delete_successful'));
