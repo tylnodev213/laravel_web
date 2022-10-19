@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'domain' => 'http://4c44-14-248-83-33.ap.ngrok.io',
     //PAGINATE CONFIG
     'pagination_records' => 5,
     //DEL_FLAG CONFIG
@@ -24,14 +25,15 @@ return [
 
     'message_delete_fail' => 'Delete Fail!',
     //URL CONFIG
-    'folder_avatar' => 'avatars',
+    'folder_avatar' => 'public',
 
-    'url_avatar' => 'http://localhost/example-app/storage/app/avatars/',
+    'url_avatar' => 'http://4c44-14-248-83-33.ap.ngrok.io/storage/',
 
-    'avatar_default' => 'http://localhost/example-app/storage/app/avatars/avatar_default.png',
+    'avatar_default' => 'http://4c44-14-248-83-33.ap.ngrok.io/storage/avatar_default.png',
 
     //EMAIL CONFIG
     'email_address' => 'duonght.paraline@gmail.com',
+    'email_subject' => 'Chào mừng ban gia nhập hệ thống!',
 
     // ACCOUNT ADMIN
     'username' => 'admin@gmail.com',
@@ -39,10 +41,13 @@ return [
 
     //VALIDATE MESSAGE
     'input_blank' => 'can not be blank',
-    'incorrect_format' => 'entered is not in the correct format',
-    'incorrect_min_length' => 'must be at least 8 characters',
     'duplicate_value' => 'has existed',
     'not_exist_value' => "not found!",
+    'radio_blank' => "must be checked",
+    'select_blank' => "must be selected",
+    'file_upload_required' => "is required",
+    'file_upload_extension' => 'must be an image'
+
 ]
 
 ?>

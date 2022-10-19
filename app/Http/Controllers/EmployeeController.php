@@ -149,7 +149,11 @@ class EmployeeController extends Controller
             return redirect()->route('Employee.search')->withError(config('constants.message_update_fail'));
         }
 
-        $this->sendEmail($upd_employee);
+        $checkEmailExist = $this->repository->findByField('email', $data['email']);
+        if(!$checkEmailExist->count()) {
+            $this->sendEmail($upd_employee);
+        }
+
         session(['removeFile' => true,]);
         return redirect()->route('Employee.search')->with('message_successful',config('constants.message_update_successful'));
     }

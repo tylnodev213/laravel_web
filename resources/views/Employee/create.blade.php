@@ -3,7 +3,7 @@
     Employee - Create
 @endsection
 @section('stylesheet')
-    {{ asset('public/css/style.css') }}
+    {{ asset('css/style.css') }}
 @endsection
 @section('content')
     @include("layouts.navbar")
@@ -109,7 +109,7 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Address*</div>
-                <input type="text" name="address" class="col-md-4 search_box__form--input"
+                <input type="text" name="address" class="col-md-4 search_box__form--input" maxlength="256"
                        value="{{ old('address') ?? '' }}">
             </div>
             <div class="row form_input">
@@ -120,7 +120,7 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Salary*</div>
-                <input type="number" name="salary" class="col-md-4 search_box__form--input"
+                <input type="number" name="salary" class="col-md-4 search_box__form--input" maxlength="11"
                        value="{{ old('salary') ?? '' }}">
                 <div class="col-md-2"> VND</div>
             </div>

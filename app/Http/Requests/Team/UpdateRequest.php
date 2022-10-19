@@ -29,7 +29,7 @@ class UpdateRequest extends FormRequest
             'name' => [
                 'bail',
                 'required',
-                Rule::unique(Team::class)->ignore($this->team),
+                Rule::unique(Team::class)->ignore($this->get('id')),
             ],
         ];
     }
@@ -47,5 +47,12 @@ class UpdateRequest extends FormRequest
         return [
             'name' => 'Name',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'id' => $this->route('team'),
+        ]);
     }
 }

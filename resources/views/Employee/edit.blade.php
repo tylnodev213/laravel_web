@@ -3,7 +3,7 @@
     Employee - Edit
 @endsection
 @section('stylesheet')
-    {{ asset('public/css/style.css') }}
+    {{ asset('css/style.css') }}
 @endsection
 @section('content')
     @include("layouts.navbar")
@@ -53,7 +53,7 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2">First Name*</div>
-                <input class="col-md-4 search_box__form--input" type="text" name="first_name" value="{{ old('first_name') ?? $employee->first_name }}">
+                <input class="col-md-4 search_box__form--input" maxlength="128" type="text" name="first_name" value="{{ old('first_name') ?? $employee->first_name }}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
@@ -107,7 +107,7 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Address*</div>
-                <input type="text" name="address" class="col-md-4 search_box__form--input" value="{{ old('address') ?? $employee->address }}">
+                <input type="text" name="address" maxlength="256"  class="col-md-4 search_box__form--input" value="{{ old('address') ?? $employee->address }}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
@@ -117,7 +117,7 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Salary*</div>
-                <input type="number" name="salary" class="col-md-4 search_box__form--input" value="{{ old('salary') ?? $employee->salary }}">
+                <input type="number" name="salary" maxlength="11"  class="col-md-4 search_box__form--input" value="{{ old('salary') ?? $employee->salary }}">
                 <div class="col-md-2"> VND</div>
             </div>
             <div class="row form_input">

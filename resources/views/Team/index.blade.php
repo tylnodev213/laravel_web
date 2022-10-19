@@ -3,7 +3,7 @@
     Team - Search
 @endsection
 @section('stylesheet')
-    {{ asset('public/css/style.css') }}
+    {{ asset('css/style.css') }}
 @endsection
 @section('content')
     @include("layouts.navbar")

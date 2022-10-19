@@ -3,7 +3,7 @@
     Login
 @endsection
 @section('stylesheet')
-    {{ asset('public/css/login.css') }}
+    {{ asset('css/login.css') }}
 @endsection
 @section('content')
 <div class="wrapper">

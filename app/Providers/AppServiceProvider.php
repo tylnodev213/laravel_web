@@ -6,8 +6,6 @@ use App\Repositories\Employee\EmployeeRepository;
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Team\TeamRepository;
 use App\Repositories\Team\TeamRepositoryInterface;
-use App\Service\Team\TeamService;
-use App\Service\Team\TeamServiceInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Validator;
@@ -38,8 +36,11 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(\Illuminate\Http\Request $request)
     {
+        if (!empty( env('NGROK_URL') ) && $request->server->has('HTTP_X_ORIGINAL_HOST')) {
+            $this->app['url']->forceRootUrl(env('NGROK_URL'));
+        }
         Paginator::useBootstrap();
         Validator::extend('file_extension', function ($attribute, $value, $parameters, $validator) {
             if (!$value instanceof UploadedFile) {

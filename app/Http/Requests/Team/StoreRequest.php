@@ -29,7 +29,7 @@ class StoreRequest extends FormRequest
             'name' => [
                 'bail',
                 'required',
-                Rule::unique(Team::class)->ignore($this->team),
+                Rule::unique(Team::class),
             ],
         ];
     }
