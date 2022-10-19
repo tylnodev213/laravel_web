@@ -12,6 +12,9 @@ class LoginController extends Controller
 {
     public function login()
     {
+        if(session()->has('id_admin')) {
+            return  redirect()->route('Team.search');
+        }
         return view('Auth.login');
     }
     public function processLogin(LoginRequest $request)

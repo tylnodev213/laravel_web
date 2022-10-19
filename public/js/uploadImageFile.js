@@ -6,7 +6,6 @@ function readFile() {
 
     FR.addEventListener("load", function(evt) {
         document.querySelector("#preview").src         = evt.target.result;
-        document.querySelector("#b64").value = evt.target.result;
     });
 
     FR.readAsDataURL(this.files[0]);

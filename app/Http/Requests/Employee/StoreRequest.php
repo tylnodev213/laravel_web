@@ -4,6 +4,7 @@ namespace App\Http\Requests\Employee;
 
 use App\Models\Employee;
 use App\Models\Team;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -45,7 +46,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'email',
                 'max:128',
-                Rule::unique(Employee::class)->ignore($this->email),
+                Rule::unique(Employee::class),
             ],
             'gender' => [
                 'bail',
@@ -62,9 +63,13 @@ class StoreRequest extends FormRequest
                 'required',
                 'max:256',
             ],
-            'avatar' => [
+            'old_avatar' => [
                 'bail',
                 'required',
+            ],
+            'avatar' => [
+                'bail',
+                'required_if:old_avatar,null',
                 'image',
                 'file_extension:jpeg,png,jpg,gif',
                 'mimes:jpeg,png,jpg,gif',
@@ -105,7 +110,7 @@ class StoreRequest extends FormRequest
             'position.required'   => ':attribute '.config('constants.select_blank'),
             'type_of_work.required'   => ':attribute '.config('constants.select_blank'),
             'status.required'   => ':attribute '.config('constants.radio_blank'),
-            'avatar.required'   => ':attribute '.config('constants.file_upload_required'),
+            'avatar.required_if'   => ':attribute '.config('constants.file_upload_required'),
             'avatar.file_extension' => ':attribute '.config('constants.file_upload_extension'),
         ];
     }
@@ -125,26 +130,29 @@ class StoreRequest extends FormRequest
             'status' => 'Status',
             'avatar' => 'File upload',
             'old_avatar' => 'File upload',
+            'email' => 'Email',
         ];
     }
 
     protected function prepareForValidation()
     {
-        $avatar = $this->get('avatar');
+        $avatar = storeFile($this);
 
-        $base64Image = explode(";base64,", $avatar);
-        $explodeImage = explode("data:", $base64Image[0]);
-        $mimetypes = $explodeImage[1]; // 1
-        $mimes = explode("image/", $explodeImage[1]);
-        $imageType = $mimes[1]; //2
-        $avatar = [
-            'mimetypes' => $mimetypes,
-            'mines' => $imageType,
-            'file_extension' => $imageType,
-        ];
-
+        if(empty($avatar)) {
+            $avatar = $this->get('old_avatar');
+        }else {
+            removeFile($this->get('old_avatar'));
+        }
         $this->merge([
-            'avatar' => $avatar,
+            'old_avatar' => $avatar,
         ]);
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        // Merge the modified inputs to the global request.
+        request()->merge($this->input());
+
+        parent::failedValidation($validator);
     }
 }

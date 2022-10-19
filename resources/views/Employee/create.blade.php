@@ -21,13 +21,15 @@
                 <div class="col-md-2"></div>
                 @if  ($errors->has('avatar'))
                     <p class="help is-danger text-danger">{{ $errors->first('avatar') }}</p>
+                @elseif ($errors->has('old_avatar'))
+                    <p class="help is-danger text-danger">{{ $errors->first('old_avatar') }}</p>
                 @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <img src="{{ !empty(old('avatar')) ? old('avatar') : config('constants.avatar_default') }}" class="avatar_profile"
+                <img src="{{ !empty(old('old_avatar')) ? config('constants.url_avatar').old('old_avatar') : config('constants.avatar_default') }}" class="avatar_profile"
                      id="preview">
-                <input type="hidden" id="b64" name="avatar" value="{{old('avatar') ?? '' }}">
+                <input type="hidden" name="old_avatar" value="{{ old('old_avatar') ?? '' }}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Team*</div>

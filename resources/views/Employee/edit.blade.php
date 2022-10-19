@@ -25,18 +25,21 @@
                 <div class="col-md-2"></div>
                 @if  ($errors->has('avatar'))
                     <p class="help is-danger text-danger">{{ $errors->first('avatar') }}</p>
+                @elseif ($errors->has('old_avatar'))
+                    <p class="help is-danger text-danger">{{ $errors->first('old_avatar') }}</p>
                 @endif
             </div>
             <div class="row form_input">
                 <div class="col-md-2"></div>
-                <img src="{{ !empty(old('avatar')) ? config('constants.url_avatar').old('avatar') : $employee->getAvatar}}" class="avatar_profile" id="preview">
-                <input type="hidden" name="old_avatar" value="{{ old('avatar') ?? $employee->avatar}}">
+                <img src="{{ !empty(old('old_avatar')) ? config('constants.url_avatar').old('old_avatar') : $employee->getAvatar}}" class="avatar_profile" id="preview">
+                <input type="hidden" name="old_avatar" value="{{ old('old_avatar') ?? $employee->avatar}}">
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Team*</div>
                 <select name="team_id" class="search_box__form search_box__form--select">
+                    <option value="">-Choose-</option>
                     @foreach($teams as $team)
-                        <option value="{{ $team->id }}" {{ old('team_id') == $team->id || $employee->team_id == $team->id ? "selected" : "" }}>
+                        <option value="{{ $team->id }}" @selected(old('team_id') == $team->id || $employee->team_id == $team->id) >
                             {{ $team->name }}
                         </option>
                     @endforeach

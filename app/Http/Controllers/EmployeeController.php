@@ -67,20 +67,12 @@ class EmployeeController extends Controller
 
     public function createConfirm(StoreRequest $request)
     {
-        $avatar = storeFile($request);
-
-        $data = $request->except('avatar','old_avatar');
-
-        if(empty($avatar)) {
-            $avatar = $request->get('old_avatar');
-        }else {
-            removeFile($request->get('old_avatar'));
-        }
+        $data = $request->safe()->except('avatar');
+        $avatar = $request->get('old_avatar');
 
         $data = array_merge($data,[
-            'avatar' => $avatar,
+            'avatar'=> $avatar,
         ]);
-
         $employee = new Employee($data);
 
         return view('Employee.create_confirm', [
@@ -121,20 +113,16 @@ class EmployeeController extends Controller
 
     public function editConfirm(UpdateRequest $request, Employee $employee)
     {
-        $data = $request->safe()->except('avatar','old_avatar');
+        $data = $request->safe()->except('avatar');
+        $avatar = $request->get('old_avatar');
 
-        $avatar = storeFile($request);
-
-        if(empty($avatar)) {
-            $avatar = $request->get('old_avatar');
-        }
         session([
             'old_avatar' => $avatar,
             'removeFile' => false,
         ]);
 
         $data = array_merge($data,[
-            'avatar' => $avatar,
+            'avatar'=> $avatar,
         ]);
 
         $employee_upd = new Employee($data);

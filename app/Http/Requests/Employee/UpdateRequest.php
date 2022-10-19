@@ -8,6 +8,7 @@ use App\Enums\Employee\StatusEnum;
 use App\Enums\Employee\TypeOfWorkEnum;
 use App\Models\Employee;
 use App\Models\Team;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -65,7 +66,13 @@ class UpdateRequest extends FormRequest
                 'required',
                 'max:256',
             ],
+            'old_avatar' => [
+                'bail',
+                'required',
+            ],
             'avatar' => [
+                'bail',
+                'required_if:old_avatar,null',
                 'image',
                 'file_extension:jpeg,png,jpg,gif',
                 'mimes:jpeg,png,jpg,gif',
@@ -126,5 +133,28 @@ class UpdateRequest extends FormRequest
             'status' => 'Status',
             'avatar' => 'File upload',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $avatar = storeFile($this);
+
+        if(empty($avatar)) {
+            $avatar = $this->get('old_avatar');
+        }else {
+            removeFile($this->get('old_avatar'));
+        }
+        $this->merge([
+            'id' => $this->route('employee'),
+            'old_avatar' => $avatar,
+        ]);
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        // Merge the modified inputs to the global request.
+        request()->merge($this->input());
+
+        parent::failedValidation($validator);
     }
 }

@@ -13,13 +13,13 @@ function storeFile($request)
         return null;
     }
 
-    return Str::of($path)->after(config('constants.url_avatar'))->value();
+    return Str::after($path,config('constants.folder_avatar').'/');
 }
 
 function removeFile($file_name)
 {
     try {
-        Storage::delete($file_name);
+        Storage::delete(config('constants.folder_avatar').'/'.$file_name);
     }catch (Throwable  $e){
         return null;
     }
