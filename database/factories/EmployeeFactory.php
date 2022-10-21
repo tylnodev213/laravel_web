@@ -17,11 +17,10 @@ class EmployeeFactory extends Factory
     public function definition()
     {
         return [
-            'team_id'=>$this->faker->numberBetween(1,5),
+            'team_id'=>$this->faker->numberBetween(1,10),
             'email'=>$this->faker->email,
             'first_name'=>$this->faker->firstName,
             'last_name'=>$this->faker->lastName,
-            'password'=>"123456",
             'gender'=>$this->faker->numberBetween(1,2),
             'birthday'=>$this->faker->date,
             'address'=>$this->faker->address,
