@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'domain' => 'http://4c44-14-248-83-33.ap.ngrok.io',
+    'domain' => 'http://3f8e-8-21-11-54.ap.ngrok.io',
     //PAGINATE CONFIG
     'pagination_records' => 5,
     //DEL_FLAG CONFIG
@@ -27,9 +27,9 @@ return [
     //URL CONFIG
     'folder_avatar' => 'public',
 
-    'url_avatar' => 'http://4c44-14-248-83-33.ap.ngrok.io/storage/',
+    'url_avatar' => 'http://937d-8-21-11-54.ap.ngrok.io/storage/',
 
-    'avatar_default' => 'http://4c44-14-248-83-33.ap.ngrok.io/storage/avatar_default.png',
+    'avatar_default' => 'http://937d-8-21-11-54.ap.ngrok.io/img/avatar_default.png',
 
     //EMAIL CONFIG
     'email_address' => 'duonght.paraline@gmail.com',
@@ -46,7 +46,10 @@ return [
     'radio_blank' => "must be checked",
     'select_blank' => "must be selected",
     'file_upload_required' => "is required",
-    'file_upload_extension' => 'must be an image'
+    'file_upload_extension' => 'must be an image',
+    'data_not_exist' => 'Data does not exist!',
+    'email_not_exist' => 'Email does not register',
+    'login_fail' => 'Login Fail',
 
 ]
 

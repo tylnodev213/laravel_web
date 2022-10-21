@@ -14,7 +14,7 @@
         <tr>
             <td>{{ $employee->id }}</td>
             <td>{{ $employee->avatar }}</td>
-            <td>{{ $employee->team->name }}</td>
+            <td>{{ $employee->teamName }}</td>
             <td>{{ $employee->fullName }}</td>
             <td>{{ $employee->email }}</td>
         </tr>

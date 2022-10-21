@@ -53,7 +53,6 @@ class EmployeeController extends Controller
 
     public function create()
     {
-        session()->pull('old_avatar');
         return view('Employee.create');
     }
 

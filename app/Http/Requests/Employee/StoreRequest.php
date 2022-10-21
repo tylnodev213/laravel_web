@@ -158,7 +158,7 @@ class StoreRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         // Merge the modified inputs to the global request.
-        request()->merge([$this->input()]);
+        request()->merge($this->input());
 
         parent::failedValidation($validator);
     }

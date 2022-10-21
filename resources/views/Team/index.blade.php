@@ -14,8 +14,8 @@
             </div>
         @elseif (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
-        @elseif($errors->has('id'))
-            <div class="alert alert-danger">{{ $errors->first('id') }}</div>
+        @elseif($errors->any())
+            <div class="alert alert-danger">{{ $errors->first() }}</div>
         @endif
     </div>
     <div class="search_box">
