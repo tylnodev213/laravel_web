@@ -27,4 +27,9 @@ final class PositionEnum extends Enum
             'Tester'  => self::Tester,
         ];
     }
+
+    public static function getKeyByValue($value): string
+    {
+        return array_search($value, self::getArrayView(), true);
+    }
 }

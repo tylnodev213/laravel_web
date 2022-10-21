@@ -117,7 +117,7 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Salary*</div>
-                <input type="number" name="salary" maxlength="11"  class="col-md-4 search_box__form--input" value="{{ old('salary') ?? $employee->salary }}">
+                <input type="text" name="salary" maxlength="11"  class="col-md-4 search_box__form--input" value="{{ old('salary') ?? $employee->salary }}">
                 <div class="col-md-2"> VND</div>
             </div>
             <div class="row form_input">

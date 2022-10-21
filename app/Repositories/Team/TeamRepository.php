@@ -41,7 +41,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
                 return $query->where('name','LIKE','%'.$name.'%');
             })
             ->orderBy($sort,$sortDirection)
-            ->paginate(config('constants.pagination_records'), ['id'], 'teams');
+            ->paginate(config('constants.pagination_records'));
 
         return $data;
     }

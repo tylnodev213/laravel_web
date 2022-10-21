@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    Employee - Edit
+    Employee - Edit Confirm
 @endsection
 @section('stylesheet')
     {{ asset('css/style.css') }}
@@ -55,12 +55,12 @@
             <div class="row form_input">
                 <div class="col-md-2">Birthday</div>
                 <input class="col-md-4 search_box__form--input input--confirm" type="hidden" name="birthday"
-                       value="{{ $employee->birthday }}">
+                       value="{{ date('Y-m-d', strtotime($employee->birthday)) }}">
                 <div class="col-md-4 search_box__form--input">{{ $employee->birthDate }}</div>
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Address</div>
-                <input class="col-md-4 search_box__form--input input--confirm" type="text" name="address"
+                <input class="col-md-8 search_box__form--input input--confirm" type="text" name="address"
                        value="{{ $employee->address }}">
             </div>
             <div class="row form_input">

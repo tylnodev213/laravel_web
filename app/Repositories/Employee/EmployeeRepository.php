@@ -27,7 +27,8 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
 
 
         $data = $this->model
-            ->select(['id', 'team_id', 'first_name', 'last_name', 'email', 'avatar',])
+            ->select(['m_employees.id as id', 'm_teams.name as teamName', 'm_employees.first_name as first_name', 'm_employees.last_name as last_name', 'm_employees.email as email', 'm_employees.avatar as avatar',])
+            ->leftJoin('m_teams', 'm_teams.id', '=', 'm_employees.team_id')
             ->when (!empty($team_id) , function ($query) use($team_id){
                 return $query->where('team_id', $team_id);
             })

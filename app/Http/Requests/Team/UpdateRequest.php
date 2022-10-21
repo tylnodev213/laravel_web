@@ -26,11 +26,6 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => [
-                'bail',
-                'required',
-                Rule::exists(Team ::class, 'id'),
-            ],
             'name' => [
                 'bail',
                 'required',
@@ -42,8 +37,8 @@ class UpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'required' => ':attribute '.config('constants.input_blank'),
-            'unique'   => ':attribute '.config('constants.duplicate_value'),
+            'name.required' => ':attribute '.config('constants.input_blank'),
+            'name.unique'   => ':attribute '.config('constants.duplicate_value'),
         ];
     }
 
@@ -58,6 +53,7 @@ class UpdateRequest extends FormRequest
     {
         $this->merge([
             'id' => $this->route('team'),
+            'name' => trim($this->get('name')),
         ]);
     }
 }

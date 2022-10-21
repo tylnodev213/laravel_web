@@ -44,11 +44,6 @@ class EmployeeController extends Controller
 
     public function index(Request $request)
     {
-        if(!session('removeFile')) {
-            $this->removeAvatarWhenReset();
-        }
-        session()->pull('old_avatar');
-
         $employees = $this->repository->show($request);
 
         return view('Employee.index', [
@@ -58,9 +53,6 @@ class EmployeeController extends Controller
 
     public function create()
     {
-        if(!session('removeFile')) {
-            $this->removeAvatarWhenReset();
-        }
         session()->pull('old_avatar');
         return view('Employee.create');
     }
@@ -87,7 +79,7 @@ class EmployeeController extends Controller
         }
 
         try{
-            $data = $request->all();
+            $data = $request->except('old_avatar');
 
             $new_employee = $this->repository->create($data);
         }catch (Exception $e) {
@@ -102,11 +94,6 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
-        if(session('removeFile')) {
-            $this->removeAvatarWhenReset();
-        }
-        session(['removeFile' => true,]);
-
         $employee = $this->repository->findbyField('id',$id)->first();
 
         if(is_null($employee)) {
@@ -122,11 +109,6 @@ class EmployeeController extends Controller
     {
         $data = $request->safe()->except('avatar');
         $avatar = $request->get('old_avatar');
-
-        session([
-            'old_avatar' => $avatar,
-            'removeFile' => false,
-        ]);
 
         $data = array_merge($data,[
             'avatar'=> $avatar,
@@ -147,7 +129,7 @@ class EmployeeController extends Controller
         }
 
         try{
-            $data = $request->all();
+            $data = $request->except('old_avatar');
 
             $upd_employee = $this->repository->update($id, $data);
         }catch (Exception $e) {
@@ -191,7 +173,4 @@ class EmployeeController extends Controller
         SendEmail::dispatch($message, $new_employee)->delay(now()->addMinute(1));
     }
 
-    public function removeAvatarWhenReset(){
-        removeFile(session()->get('old_avatar'));
-    }
 }

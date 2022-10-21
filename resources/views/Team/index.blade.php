@@ -33,33 +33,41 @@
     </div>
     <div class="data">
         <div class="paginate">
-            {{ $teams->links() }}
+            {!! $teams->appends([
+                'sort' => request()->get('sort'),
+                'sortDirection' => request()->get('sortDirection'),
+                'name' => request()->get('name'),
+            ])->links() !!}
         </div>
         <table width="100%" border="1" cellspacing="0" class="table table-striped">
             <tr class="table-primary">
                 <th class="text-center col-md-1">
-                    <a href="">
+                    <a href="{{ sortByField('id').getRequest(request()->except(['sort','sortDirection'])) }}">
                         <span>ID</span>
                         @if ($teams->count()>0)
-                            <a href="{{ sortByField('id').getRequest(request()->except(['sort','sortDirection'])) }}">
-                            <span class="sort">
-                                <i class="arrow up"></i>
-                                <i class="arrow down"></i>
-                            </span>
-                            </a>
+                            @if(request()->get('sort') == 'id')
+                                @include("layouts.sortIcon")
+                            @else
+                                <span class="sort">
+                                    <i class="arrow up"></i>
+                                    <i class="arrow down"></i>
+                                </span>
+                            @endif
                         @endif
                     </a>
                 </th>
                 <th class="text-center col-md-7">
-                    <a href="">
+                    <a href="{{ sortByField('name').getRequest(request()->except(['sort','sortDirection'])) }}">
                         <span>Name</span>
                         @if ($teams->count()>0)
-                            <a href="{{ sortByField('name').getRequest(request()->except(['sort','sortDirection'])) }}">
-                            <span class="sort">
-                                <i class="arrow up"></i>
-                                <i class="arrow down"></i>
-                            </span>
-                            </a>
+                            @if(request()->get('sort') == 'name')
+                                @include("layouts.sortIcon")
+                            @else
+                                <span class="sort">
+                                    <i class="arrow up"></i>
+                                    <i class="arrow down"></i>
+                                </span>
+                            @endif
                         @endif
                     </a>
                 </th>

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    Team - Create Confirm
+    Employee - Create Confirm
 @endsection
 @section('stylesheet')
     {{ asset('css/style.css') }}
@@ -8,7 +8,7 @@
 @section('content')
     @include("layouts.navbar")
     <div class="flow_url">
-        <p>Team - Create Confirm</p>
+        <p>Employee - Create Confirm</p>
     </div>
     <form class="form_container" action="{{route('Employee.store')}}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -49,12 +49,12 @@
             <div class="row form_input">
                 <div class="col-md-2">Birthday</div>
                 <input class="col-md-4 search_box__form--input input--confirm" type="hidden" name="birthday"
-                       value="{{ $employee->birthday }}">
+                       value="{{ date('Y-m-d', strtotime($employee->birthday)) }}">
                 <div class="col-md-4 search_box__form--input">{{ $employee->birthDate }}</div>
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Address</div>
-                <input class="col-md-4 search_box__form--input input--confirm" type="text" name="address" readonly
+                <input class="col-md-8 search_box__form--input input--confirm" type="text" name="address" readonly
                        value="{{ $employee->address }}">
             </div>
             <div class="row form_input">

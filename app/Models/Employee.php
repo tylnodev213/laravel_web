@@ -51,20 +51,6 @@ class Employee extends Model
         return $this->belongsTo(Team::class,'team_id','id')->addSelect('name');
     }
 
-    protected function firstName(): Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => strtolower($value),
-        );
-    }
-
-    protected function lastName(): Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => strtolower($value),
-        );
-    }
-
     protected function fullName(): Attribute
     {
         return Attribute::make(
@@ -96,28 +82,28 @@ class Employee extends Model
     protected function getPosition(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => PositionEnum::getKey((int)$attributes['position']),
+            get: fn ($value, $attributes) => PositionEnum::getKeyByValue((int)$attributes['position']),
         );
     }
 
     protected function getTypeOfWork(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => TypeOfWorkEnum::getKey((int)$attributes['type_of_work']),
+            get: fn ($value, $attributes) => TypeOfWorkEnum::getKeyByValue((int)$attributes['type_of_work']),
         );
     }
 
     protected function getStatus(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => StatusEnum::getKey((int)$attributes['status']),
+            get: fn ($value, $attributes) => StatusEnum::getKeyByValue((int)$attributes['status']),
         );
     }
 
     protected function getAvatar(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => Storage::exists(config('constants.folder_avatar').'/'.$attributes['avatar']) ? config('constants.url_avatar').$attributes['avatar'] : config('constants.avatar_default'),
+            get: fn ($value, $attributes) => Storage::exists(config('constants.folder_avatar').'/'.$attributes['avatar']) && !empty($attributes['avatar']) ? config('constants.url_avatar').$attributes['avatar'] : config('constants.avatar_default'),
         );
     }
 

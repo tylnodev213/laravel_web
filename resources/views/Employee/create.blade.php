@@ -120,7 +120,7 @@
             </div>
             <div class="row form_input">
                 <div class="col-md-2">Salary*</div>
-                <input type="number" name="salary" class="col-md-4 search_box__form--input" maxlength="11"
+                <input type="text" name="salary" class="col-md-4 search_box__form--input" maxlength="11"
                        value="{{ old('salary') ?? '' }}">
                 <div class="col-md-2"> VND</div>
             </div>

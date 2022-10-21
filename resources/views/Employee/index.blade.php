@@ -14,8 +14,8 @@
             </div>
         @elseif (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
-        @elseif($errors->has('id'))
-            <div class="alert alert-danger">{{ $errors->first('id') }}</div>
+        @elseif($errors->any())
+            <div class="alert alert-danger">{{ $errors->first() }}</div>
         @endif
     </div>
     <div class="search_box">
@@ -50,60 +50,74 @@
     </div>
     <div class="data">
         <div class="paginate">
-            {{ $employees->links() }}
+            {!! $employees->appends([
+                'sort' => request()->get('sort'),
+                'sortDirection' => request()->get('sortDirection'),
+                'name' => request()->get('name'),
+                'email' => request()->get('email'),
+                'team_id' => request()->get('team_id'),
+            ])->links() !!}
         </div>
         <table width="100%" border="1" cellspacing="0" class="table table-striped">
             <tr class="table-primary">
                 <th class="text-center col-md-1">
-                    <a href="">
+                    <a href="{{ sortByField('id').getRequest(request()->except(['sort','sortDirection'])) }}">
                         <span>ID</span>
                         @if ($employees->count()>0)
-                            <a href="{{ sortByField('id').getRequest(request()->except(['sort','sortDirection'])) }}">
+                            @if(request()->get('sort') == 'id')
+                                @include("layouts.sortIcon")
+                            @else
                                 <span class="sort">
                                     <i class="arrow up"></i>
                                     <i class="arrow down"></i>
                                 </span>
-                            </a>
+                            @endif
                         @endif
                     </a>
                 </th>
                 <th class="col-md-2"></th>
                 <th class="text-center col-md-2">
-                    <a href="">
+                    <a href="{{ sortByField('teamName').getRequest(request()->except(['sort','sortDirection'])) }}">
                         <span>Team</span>
                         @if ($employees->count()>0)
-                            <a href="{{ sortByField('team_id').getRequest(request()->except(['sort','sortDirection'])) }}">
-                            <span class="sort">
-                                <i class="arrow up"></i>
-                                <i class="arrow down"></i>
-                            </span>
-                            </a>
+                            @if(request()->get('sort') == 'teamName')
+                                @include("layouts.sortIcon")
+                            @else
+                                <span class="sort">
+                                    <i class="arrow up"></i>
+                                    <i class="arrow down"></i>
+                                </span>
+                            @endif
                         @endif
                     </a>
                 </th>
                 <th class="text-center col-md-2">
-                    <a href="">
+                    <a href="{{ sortByField('last_name').getRequest(request()->except(['sort','sortDirection'])) }}">
                         <span>Name</span>
                         @if ($employees->count()>0)
-                            <a href="{{ sortByField('last_name').getRequest(request()->except(['sort','sortDirection'])) }}">
-                            <span class="sort">
-                                <i class="arrow up"></i>
-                                <i class="arrow down"></i>
-                            </span>
-                            </a>
+                            @if(request()->get('sort') == 'last_name')
+                                @include("layouts.sortIcon")
+                            @else
+                                <span class="sort">
+                                    <i class="arrow up"></i>
+                                    <i class="arrow down"></i>
+                                </span>
+                            @endif
                         @endif
                     </a>
                 </th>
                 <th class="text-center col-md-2">
-                    <a href="">
+                    <a href="{{ sortByField('email').getRequest(request()->except(['sort','sortDirection'])) }}">
                         <span>Email</span>
                         @if ($employees->count()>0)
-                            <a href="{{ sortByField('email').getRequest(request()->except(['sort','sortDirection'])) }}">
-                            <span class="sort">
-                                <i class="arrow up"></i>
-                                <i class="arrow down"></i>
-                            </span>
-                            </a>
+                            @if(request()->get('sort') == 'email')
+                                @include("layouts.sortIcon")
+                            @else
+                                <span class="sort">
+                                    <i class="arrow up"></i>
+                                    <i class="arrow down"></i>
+                                </span>
+                            @endif
                         @endif
                     </a>
                 </th>
@@ -114,7 +128,7 @@
                     <tr>
                         <td class="column text-center">{{$employee->id}}</td>
                         <td class="column text-center"><img src="{{$employee->getAvatar}}" class="avatar_img" alt="avatar admin"></td>
-                        <td class="column ">{{$employee->team->name ?? config('constants.ROOM_IS_NULL')}}</td>
+                        <td class="column ">{{$employee->teamName ?? config('constants.ROOM_IS_NULL')}}</td>
                         <td class="column ">{{$employee->fullName}}</td>
                         <td class="column ">{{$employee->email}}</td>
                         <td class="column text-center">

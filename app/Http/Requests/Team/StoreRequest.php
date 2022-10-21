@@ -29,6 +29,7 @@ class StoreRequest extends FormRequest
             'name' => [
                 'bail',
                 'required',
+                'max:128',
                 Rule::unique(Team::class),
             ],
         ];
@@ -47,5 +48,12 @@ class StoreRequest extends FormRequest
         return [
             'name' => 'Name',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'name' => trim($this->get('name')),
+        ]);
     }
 }

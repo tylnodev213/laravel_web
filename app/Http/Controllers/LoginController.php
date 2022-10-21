@@ -26,7 +26,15 @@ class LoginController extends Controller
             session()->put('id_admin', 1);
             return  redirect()->route('Team.search');
         }
-        return view('Auth.login');
+
+        if($email != config('constants.username') || $password != config('constants.password')) {
+            session()->put('error_login',config('constants.login_fail'));
+        }
+
+        return view('Auth.login',[
+            'email' => $email,
+            'password' => $password,
+        ]);
     }
 
     public function logout()

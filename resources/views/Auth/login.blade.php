@@ -1,4 +1,4 @@
-@extends('layouts.master');
+@extends('layouts.master')
 @section('title')
     Login
 @endsection
@@ -13,16 +13,19 @@
             <div class="form_container">
                 <label for="email">Email</label>
             </div>
-            <input type="text" id="email" name="email" value="{{ old('email') }}">
+            <input type="text" id="email" name="email" value="{{ $email ?? old('email') }}">
             <div class="form_container">
                 @if ($errors->has('email'))
                     <p class="help is-danger text-danger">{{ $errors->first('email') }}</p>
+                @elseif (session()->has('error_login'))
+                    <div class="help is-danger text-danger">{{ session()->get('error_login') }}</div>
+                    <?php session()->pull('error_login') ?>
                 @endif
             </div>
             <div class="form_container">
                 <label for="password">Password</label>
             </div>
-            <input type="password" id="password" name="password" value="{{ old('password') }}">
+            <input type="password" id="password" name="password" value="{{ $password ?? old('password') }}">
             <div class="form_container">
                 @if ($errors->has('password'))
                     <p class="help is-danger text-danger">{{ $errors->first('password') }}</p>

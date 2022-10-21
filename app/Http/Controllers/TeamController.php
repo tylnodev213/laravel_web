@@ -63,7 +63,7 @@ class TeamController extends Controller
 
     public function edit($id)
     {
-        $team = $this->repository->findbyField('id',$id)->first();
+        $team = $this->teamRepository->findbyField('id',$id)->first();
 
         if(is_null($team)) {
             return redirect()->route('Team.search')->withErrors(config('constants.data_not_exist'));

@@ -24,8 +24,14 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'bail|required|email',
-            'password' => 'bail|required',
+            'email' => [
+                'bail',
+                'required',
+            ],
+            'password' => [
+                'bail',
+                'required',
+            ],
         ];
     }
 
@@ -33,7 +39,6 @@ class LoginRequest extends FormRequest
     {
         return [
             'email.required' => 'Email '.config('constants.input_blank'),
-
             'password.required' => 'Password '.config('constants.input_blank'),
         ];
     }

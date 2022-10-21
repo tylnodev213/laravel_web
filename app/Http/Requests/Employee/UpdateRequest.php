@@ -62,6 +62,7 @@ class UpdateRequest extends FormRequest
             'birthday' => [
                 'bail',
                 'required',
+                'date_format:m/d/Y',
                 'before:now',
             ],
             'address' => [
@@ -117,7 +118,7 @@ class UpdateRequest extends FormRequest
             'position.required'   => ':attribute '.config('constants.select_blank'),
             'type_of_work.required'   => ':attribute '.config('constants.select_blank'),
             'status.required'   => ':attribute '.config('constants.radio_blank'),
-            'avatar.required'   => ':attribute '.config('constants.file_upload_required'),
+            'avatar.required_if'   => ':attribute '.config('constants.file_upload_required'),
             'avatar.file_extension' => ':attribute '.config('constants.file_upload_extension'),
         ];
     }
@@ -151,6 +152,11 @@ class UpdateRequest extends FormRequest
         $this->merge([
             'id' => $this->route('employee'),
             'old_avatar' => $avatar,
+            'email' => trim($this->get('email')),
+            'first_name' => trim($this->get('first_name')),
+            'last_name' => trim($this->get('last_name')),
+            'address' => trim($this->get('address')),
+            'birthday' => date('m/d/Y',strtotime($this->get('birthday'))),
         ]);
     }
 

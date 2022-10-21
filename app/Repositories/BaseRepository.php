@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 
+use App\Models\Employee;
+
 abstract class BaseRepository implements RepositoryInterface
 {
     public $model;
@@ -74,8 +76,8 @@ abstract class BaseRepository implements RepositoryInterface
             'upd_id'=> session()->get('id_admin'),
             'upd_datetime' => date('Y-m-d H:i:s'),
         ]);
-
         $result = $this->find($id);
+        //dd($result);
         if ($result->count()) {
             $result->update($attributes);
             return $result;
