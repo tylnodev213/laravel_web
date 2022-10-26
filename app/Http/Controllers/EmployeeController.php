@@ -35,11 +35,11 @@ class EmployeeController extends Controller
         $position = PositionEnum::getArrayView();
         $status = StatusEnum::getArrayView();
         $typeOfWork = TypeOfWorkEnum::getArrayView();
-        View::share('teams',$teams);
-        View::share('gender',$gender);
-        View::share('position',$position);
-        View::share('status',$status);
-        View::share('typeOfWork',$typeOfWork);
+        View::share('teams', $teams);
+        View::share('gender', $gender);
+        View::share('position', $position);
+        View::share('status', $status);
+        View::share('typeOfWork', $typeOfWork);
     }
 
     public function index(Request $request)
@@ -51,51 +51,61 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        return view('Employee.create');
-    }
-
     public function createConfirm(StoreRequest $request)
     {
         $data = $request->safe()->except('avatar');
         $avatar = $request->get('old_avatar');
 
-        $data = array_merge($data,[
-            'avatar'=> $avatar,
+        $data = array_merge($data, [
+            'avatar' => $avatar,
         ]);
         $employee = new Employee($data);
 
         return view('Employee.create_confirm', [
-            'employee'=>$employee,
+            'employee' => $employee,
         ]);
     }
 
     public function store(Request $request)
     {
-        if($request->get('submit')== 'Back') {
+        if ($request->get('submit') == 'Back') {
             return redirect()->route('Employee.create')->withInput($request->input());
         }
 
-        try{
+        try {
             $data = $request->except('old_avatar');
 
             $new_employee = $this->repository->create($data);
-        }catch (Exception $e) {
-            Log::error('Create employee fail.', ['id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+        } catch (Exception $e) {
+            Log::error('Create employee fail.',
+                ['id_admin' => session()->get('id_admin'), 'exception' => $e->getMessage()]);
             return redirect()->route('Employee.search')->withErrors(config('constants.message_create_fail'));
         }
 
         $this->sendEmail($new_employee);
 
-        return redirect()->route('Employee.search')->with('message_successful', config('constants.message_create_successful'));
+        return redirect()->route('Employee.search')->with('message_successful',
+            config('constants.message_create_successful'));
+    }
+
+    public function create()
+    {
+        return view('Employee.create');
+    }
+
+    public function sendEmail($new_employee)
+    {
+        $message = [
+            'fullName' => $new_employee->fullName,
+        ];
+        SendEmail::dispatch($message, $new_employee)->delay(now()->addMinute(1));
     }
 
     public function edit($id)
     {
-        $employee = $this->repository->findbyField('id',$id)->first();
+        $employee = $this->repository->findbyField('id', $id)->first();
 
-        if(is_null($employee)) {
+        if (is_null($employee)) {
             return redirect()->route('Employee.search')->withErrors(config('constants.data_not_exist'));
         }
 
@@ -109,8 +119,8 @@ class EmployeeController extends Controller
         $data = $request->safe()->except('avatar');
         $avatar = $request->get('old_avatar');
 
-        $data = array_merge($data,[
-            'avatar'=> $avatar,
+        $data = array_merge($data, [
+            'avatar' => $avatar,
         ]);
 
         $employee_upd = new Employee($data);
@@ -123,53 +133,50 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {
-        if($request->get('submit')== 'Back') {
-            return redirect()->route('Employee.edit',$id)->withInput($request->input());
+        if ($request->get('submit') == 'Back') {
+            return redirect()->route('Employee.edit', $id)->withInput($request->input());
         }
 
-        try{
+        try {
             $data = $request->except('old_avatar');
 
             $upd_employee = $this->repository->update($id, $data);
-        }catch (Exception $e) {
-            Log::error('Update employee fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+        } catch (Exception $e) {
+            Log::error('Update employee fail.',
+                ['id' => $id, 'id_admin' => session()->get('id_admin'), 'exception' => $e->getMessage()]);
 
             return redirect()->route('Employee.search')->withErrors(config('constants.message_update_fail'));
         }
 
         $checkEmailExist = $this->repository->findByField('email', $data['email']);
-        if(!$checkEmailExist->count()) {
+        if (!$checkEmailExist->count()) {
             $this->sendEmail($upd_employee);
         }
 
-        session(['removeFile' => true,]);
-        return redirect()->route('Employee.search')->with('message_successful',config('constants.message_update_successful'));
+        return redirect()->route('Employee.search')->with('message_successful',
+            config('constants.message_update_successful'));
     }
 
     public function destroy(DeleteRequest $request)
     {
         $id = $request->get('id');
 
-        try{
+        try {
             $data = $this->repository->softDelete($id);
-        }catch (Exception $e) {
-            Log::error('Delete employee fail.', ['id'=>$id, 'id_admin' => session()->get('id_admin'), 'exception'=>$e->getMessage()]);
+        } catch (Exception $e) {
+            Log::error('Delete employee fail.',
+                ['id' => $id, 'id_admin' => session()->get('id_admin'), 'exception' => $e->getMessage()]);
 
             return redirect()->route('Employee.search')->withErrors(config('constants.message_delete_fail'));
         }
 
-        return redirect()->route('Employee.search')->with('message_successful',config('constants.message_delete_successful'));
+        return redirect()->route('Employee.search')->with('message_successful',
+            config('constants.message_delete_successful'));
     }
 
-    public function exportFile(Request $request) {
+    public function exportFile(Request $request)
+    {
         return Excel::download(new EmployeesExport($request->all()), 'employees.csv');
-    }
-
-    public function sendEmail($new_employee) {
-        $message = [
-            'fullName' => $new_employee->fullName,
-        ];
-        SendEmail::dispatch($message, $new_employee)->delay(now()->addMinute(1));
     }
 
 }
